@@ -276,7 +276,7 @@ export const getUser = async (id: string) => {
     }
 }
 
-export const geAlltUsers = async () => {
+export const getAllUsers = async () => {
     try {
         const users = await prisma.dridexUser.findMany()
         return users

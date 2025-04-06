@@ -2,10 +2,9 @@ import { updateUser } from "@/app/actions/database";
   import { NextResponse } from "next/server";
   
   export async function PUT(req: Request) {
-    try {
-      const body = await req.json();
-      //const params = {}; // TODO: parse URL or headers if needed
-      const result = await updateUser(body.id, body);
+    try {    
+         const {id, data} = await req.json()
+      const result = await updateUser(id, data);
       return NextResponse.json({ result }, { status: 200 });
     } catch (error: any) {
       return NextResponse.json({ message: error.message }, { status: 400 });

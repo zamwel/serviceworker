@@ -2,9 +2,8 @@ import { getAllUsers } from "@/app/actions/database";
   import { NextResponse } from "next/server";
   
   export async function GET(req: Request) {
-    try {
-      
-      //const params = {}; // TODO: parse URL or headers if needed
+    try {    
+         
       const result = await getAllUsers();
       return NextResponse.json({ result }, { status: 200 });
     } catch (error: any) {
