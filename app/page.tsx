@@ -66,7 +66,7 @@ const AutomatedRoutes = () => {
       : "";
 
     const paramList = params
-      .map((p) => (p === "data" ? "body" : `params.${p}`))
+      .map((p) => (p === "data" ? "body" : `body.${p}`))
       .join(", ");
 
     const code = `
@@ -76,7 +76,7 @@ const AutomatedRoutes = () => {
   export async function ${methodName}(req: Request) {
     try {
       ${bodyParse}
-      const params = await req.json(); // TODO: parse URL or headers if needed
+      //const params = {}; // TODO: parse URL or headers if needed
       const result = await ${name}(${paramList});
       return NextResponse.json({ result }, { status: 200 });
     } catch (error: any) {
@@ -90,7 +90,7 @@ const AutomatedRoutes = () => {
   });
 }
 
-
+AutomatedRoutes()
 
 export default function Home() {
   return (
