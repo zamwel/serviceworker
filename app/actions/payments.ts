@@ -189,12 +189,13 @@ export const createcryptoPayment = async (list: PaymentList): Promise<CryptoPaym
 };
 
 export const isPaymentServed = async (paymentId: string) => {
-    const ispayexits = await prisma.dridexTransaction.findFirst({ where: { paymentId } });
-    if (ispayexits) {
-        return true;
-    } else {
-        return false;
+    try {
+        const ispayexits = await prisma.dridexTransaction.findFirst({ where: { paymentId } });
+        return ispayexits
+    } catch (error: any) {
+        throw new Error(error.message)
     }
+
 }
 
 export const getcryptopaymentStatus = async (pid: string) => {
@@ -222,7 +223,7 @@ export const updateBalance = async (id: string, balance: number, record?: any) =
             where: { id },
             data: { balance },
         });
-        
+
 
         if (record) {
             try {
@@ -239,9 +240,9 @@ export const updateBalance = async (id: string, balance: number, record?: any) =
             where: { id },
         });
 
-        
 
-        return {update, newBalance}
+
+        return { update, newBalance }
     } catch (error: any) {
         throw new Error(error.message);
     } finally {
