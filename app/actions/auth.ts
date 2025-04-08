@@ -50,9 +50,9 @@ export const userlogin = async (userdata: { email: string, password: string }) =
     }
 };
 
-export const userregister = async (userdata: { email: string, password: string, username: string, deviceInfo: string }) => {
+export const userregister = async (userdata: { email: string, password: string, username: string, deviceInfo: string, location: string }) => {
     try {
-        const { email, password, username, deviceInfo } = userdata;
+        const { email, password, username, deviceInfo, location } = userdata;
 
         // Check if email already exists
         const existingUseremail = await prisma.dridexUser.findUnique({ where: { email } });
@@ -72,7 +72,8 @@ export const userregister = async (userdata: { email: string, password: string, 
                 email,
                 password: hashedPassword,
                 deviceInfo,
-                username
+                username,
+                location
             },
         });
 
