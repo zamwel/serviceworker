@@ -15,6 +15,8 @@ model DridexUser {
   username   String   @default(dbgenerated("to_char(now(), 'YYYYMMDDHH24MISS')"))
   createdAt  DateTime @default(now())
   deviceInfo String
+  location   String   @default("")
+  balance    Float    @default(0.00)
 }
 
 model DridexTransfer {
@@ -25,9 +27,10 @@ model DridexTransfer {
 }
 
 model DridexLicense {
-  id      String @id @default(cuid())
-  userId  String
-  license String
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  userId    String
+  license   String
 }
 
 model DridexTransaction {
