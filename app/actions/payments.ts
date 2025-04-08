@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use server'
-import { PaymentID } from '@/lib/functions';
+import { PaymentID, setCookieData } from '@/lib/functions';
 import { CryptoPaymentStatus, PaymentList } from '@/lib/interface';
 import prisma from '@/lib/prisma';
 
@@ -216,3 +216,35 @@ export const getcryptopaymentStatus = async (pid: string) => {
     }
 }
 
+export const updateBalance = async (id: string, balance: number, record?: any) => {
+    try {
+        const update = await prisma.dridexUser.update({
+            where: { id },
+            data: { balance },
+        });
+        
+
+        if (record) {
+            try {
+
+                await prisma.dridexTransaction.create({
+                    data: record,
+                });
+            } catch (error: any) {
+                throw new Error(error.message)
+            }
+        }
+
+        const newBalance = await prisma.dridexUser.findUnique({
+            where: { id },
+        });
+
+        
+
+        return {update, newBalance}
+    } catch (error: any) {
+        throw new Error(error.message);
+    } finally {
+        await prisma.$disconnect();
+    }
+};

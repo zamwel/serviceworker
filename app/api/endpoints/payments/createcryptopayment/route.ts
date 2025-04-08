@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createcryptoPayment } from "@/app/actions/payments";
 import { NextResponse } from "next/server";
 
