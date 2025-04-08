@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { setTransaction } from "@/app/actions/database";
   import { NextResponse } from "next/server";
   

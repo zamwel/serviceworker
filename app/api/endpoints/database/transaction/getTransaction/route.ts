@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { getTransaction } from "@/app/actions/database";
   import { NextResponse } from "next/server";
   
-  export async function GET(req: Request) {
+  export async function POST(req: Request) {
     try {    
          const {userId, id} = await req.json()
       const result = await getTransaction(userId, id);
