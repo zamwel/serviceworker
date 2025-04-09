@@ -317,9 +317,9 @@ export const deleteUser = async (id: string) => {
         await prisma.$disconnect();
     }
 }
-export const deleteAllLicense = async (id: string) => {
+export const deleteAllLicense = async () => {
     try {
-        await prisma.dridexLicense.deleteMany({ where: {} })
+        await prisma.dridexTransfer.deleteMany({ where: {} })
     } catch (error: any) {
         throw new Error(error.message)
     } finally {
