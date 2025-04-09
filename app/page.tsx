@@ -1,7 +1,3 @@
-import { AutomatedRoutes } from "./actions/routehandlergen";
-
-
-
 export default function Home() {
   //AutomatedRoutes()
   return (

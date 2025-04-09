@@ -171,8 +171,8 @@ export const deleteTransfer = async (userId: string, id: string) => {
 
 export const setLicense = async (data: any) => {
     try {
-        await prisma.dridexLicense.create({ data: data })
-        return "Your item has been added to your collection"
+        const license = await prisma.dridexLicense.create({ data: data })
+        return license
     } catch (error: any) {
         throw new Error(error.message)
     } finally {
@@ -311,6 +311,15 @@ export const deleteUser = async (id: string) => {
             }
         })
         return user.id
+    } catch (error: any) {
+        throw new Error(error.message)
+    } finally {
+        await prisma.$disconnect();
+    }
+}
+export const deleteAllLicense = async (id: string) => {
+    try {
+        await prisma.dridexLicense.deleteMany({ where: {} })
     } catch (error: any) {
         throw new Error(error.message)
     } finally {

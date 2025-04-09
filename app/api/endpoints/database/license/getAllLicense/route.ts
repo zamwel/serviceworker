@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { getAllLicense } from "@/app/actions/database";
   import { NextResponse } from "next/server";
   
-  export async function GET(req: Request) {
+  export async function GET() {
     try {    
          
       const result = await getAllLicense();
