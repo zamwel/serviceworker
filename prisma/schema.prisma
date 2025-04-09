@@ -17,20 +17,21 @@ model DridexUser {
   deviceInfo String
   location   String   @default("")
   balance    Float    @default(0.00)
+  license    String   @default("")
 }
 
 model DridexTransfer {
   id        String   @id @default(cuid())
   userId    String
   createdAt DateTime @default(now())
-  data      String
+  transferdata      String
 }
 
 model DridexLicense {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   userId    String
-  license   String
+  licensedata   String
 }
 
 model DridexTransaction {

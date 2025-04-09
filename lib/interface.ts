@@ -18,17 +18,16 @@ export interface DridexUser {
     password: string;
     username: string;
     createdAt: Date;
+    license: string
 
 }
 
 
-export interface DridexPurchase {
+export interface DridexTransfer {
     [x: string]: any
-    createdAt: Date;
-    updatedAt: Date;
-    itemId: string;
-    itemType: string;
-    userId: string;
+    transferdata: string
+    userId: string
+
 }
 
 export interface DridexTransaction {
@@ -39,6 +38,13 @@ export interface DridexTransaction {
     paymentType: string;
     userId: string;
     amount: string
+
+}
+
+export interface DridexLicense {
+    [x: string]: any
+    userId: string
+    licensedata: string
 }
 
 export interface PaymentList {
