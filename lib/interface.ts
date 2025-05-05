@@ -50,6 +50,7 @@ export interface DridexLicense {
 export interface PaymentList {
     amount: number;
     coin: string;
+    orderid?: string;
 }
 
 export interface CryptoPaymentStatus {

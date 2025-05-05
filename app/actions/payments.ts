@@ -148,7 +148,7 @@ export const checkTransactionStatus = async (txRef: string) => {
 export const createcryptoPayment = async (list: PaymentList): Promise<CryptoPaymentStatus> => {
     const pkey = process.env.CPAY as string;
 
-    const { amount, coin } = list;
+    const { amount, coin, orderid } = list;
     //console.log('Amount: ', amount, 'Coin: ', coin, 'key', pkey);
 
     const myHeaders = new Headers();
@@ -162,7 +162,7 @@ export const createcryptoPayment = async (list: PaymentList): Promise<CryptoPaym
         "price_currency": "usd",
         "pay_currency": coin,
         "ipn_callback_url": "https://nowpayments.io",
-        "order_id": 'DMT-' + PaymentID(8).toUpperCase(),
+        "order_id": orderid ? orderid : 'DMT-' + PaymentID(8).toUpperCase(),
         "is_fee_paid_by_user": false,
         "is_fixed_rate": true,
         "order_description": `This payment will enable the tools to be set in order for the transaction process to be completed. Pay exactly the actual amount to avoid any issues.`

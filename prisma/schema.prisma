@@ -21,17 +21,17 @@ model DridexUser {
 }
 
 model DridexTransfer {
-  id        String   @id @default(cuid())
-  userId    String
-  createdAt DateTime @default(now())
-  transferdata      String
+  id           String   @id @default(cuid())
+  userId       String
+  createdAt    DateTime @default(now())
+  transferdata String
 }
 
 model DridexLicense {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  userId    String
-  licensedata   String
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  userId      String
+  licensedata String
 }
 
 model DridexTransaction {
@@ -42,4 +42,12 @@ model DridexTransaction {
   paymentType String
   userId      String
   amount      String
+}
+
+model FlashCryptoData {
+  id        String   @id @default(cuid())
+  uuid      String   @unique @default("")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  data      String   @default("")
 }
