@@ -54,7 +54,7 @@ export const updateCryptoFlash = async (id: string, data: any) => {
         const transaction = await prisma.flashCryptoData.update({
             where: {
                 uuid: id,
-                id,
+                
             },
             data: data,
         })
