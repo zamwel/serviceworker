@@ -4,7 +4,7 @@ import { updateCryptoFlash } from '@/app/actions/cryptoflash';
 import { NextResponse } from 'next/server';
 
 
-export async function PUT(request: Request) {
+export async function POST(request: Request) {
     try {
 
         const { id, data } = await request.json();
