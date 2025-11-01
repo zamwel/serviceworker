@@ -9,5 +9,5 @@ export default function Home() {
       {/* <button onClick={async()=>await deleteAllLicense()}>Delete All</button> */}
     </div>
   );
-}
+} 
  
