@@ -1,5 +1,5 @@
 'use client'
-import { deleteAllLicense } from "./actions/database";
+//import { deleteAllLicense } from "./actions/database";
 export default function Home() {
   //AutomatedRoutes()
   return (

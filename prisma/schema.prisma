@@ -51,3 +51,10 @@ model FlashCryptoData {
   updatedAt DateTime @updatedAt
   data      String   @default("")
 }
+
+model FlashCryptoReward {
+  id        String   @id @default(cuid())
+  user      String   @default("")
+  referer   String   @default("")
+  createdAt DateTime @default(now())
+}

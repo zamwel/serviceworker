@@ -57,7 +57,7 @@ export const updateCryptoFlash = async (id: string, data: any) => {
             },
             data: data
         })
-        return transaction.id
+        return transaction
     } catch (error: any) {
         throw new Error(error.message)
     } finally {
