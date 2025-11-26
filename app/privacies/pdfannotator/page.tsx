@@ -45,7 +45,7 @@ const PrivacyPolicy = () => {
           <li><strong>Usage Data:</strong> Features you use, time spent in the App, error logs</li>
           <li><strong>App Performance:</strong> Crash reports and performance metrics to improve app stability</li>
         </ul>
-      </section>
+      </section> 
 
       <section className="mb-8">
         <h2 className="text-[#0175C2] mt-8">3. How We Use Your Information</h2>
