@@ -5,7 +5,7 @@ const PrivacyPolicy = () => {
     <div style={{ 
       maxWidth: '800px', 
       margin: '0 auto', 
-      padding: '20px',
+      padding: '20px', 
       fontFamily: 'Arial, sans-serif',
       lineHeight: '1.6',
       color: '#333'
@@ -15,6 +15,7 @@ const PrivacyPolicy = () => {
       </h1>
       
       <p style={{ fontSize: '14px', color: '#666', marginBottom: '30px' }}>
+        
         <strong>Last Updated:</strong> {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
       </p>
 
