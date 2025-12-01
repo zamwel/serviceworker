@@ -10,4 +10,4 @@ export async function PUT(req: Request) {
   } catch (error: any) {
     return NextResponse.json({ message: error.message }, { status: 400 });
   }
-}
+} 
