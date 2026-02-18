@@ -1,0 +1,12 @@
+{
+    "success": true,
+    "decryptedText": "1023456789\nJohn Doe\nWASSCE (PRIVATE), 2023\nAccra Technical Training Centre\nMathematics\nB3\nGOOD\nEnglish Language\nC4\nCREDIT\nIntegrated Science\nA1\nEXCELLENT\nSocial Studies\nB2\nVERY GOOD",
+    "data": {
+        "indexNumber": "1023456789",
+        "candidateName": "John Doe",
+        "examType": "WASSCE (PRIVATE), 2023",
+        "center": "Accra Technical Training Centre",
+        "subjects": []
+    },
+    "markup": "skipping markup gen"
+}

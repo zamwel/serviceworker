@@ -26,8 +26,8 @@ export default function PrivacyPolicyAndTerms() {
               Introduction
             </h3>
             <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
-              SubsWatcher ("we," "our," or "us") is committed to protecting your privacy. 
-              This Privacy Policy explains how we collect, use, disclose, and safeguard your 
+              SubsWatcher ("we," "our," or "us") is committed to protecting your privacy.
+              This Privacy Policy explains how we collect, use, disclose, and safeguard your
               information when you use our mobile application.
             </p>
 
@@ -40,24 +40,24 @@ export default function PrivacyPolicyAndTerms() {
             </h4>
             <ul className="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300 mb-4">
               <li>
-                <strong className="text-gray-900 dark:text-white">Subscription Data</strong>: 
-                Service names, costs, renewal dates, billing cycles, categories, payment 
+                <strong className="text-gray-900 dark:text-white">Subscription Data</strong>:
+                Service names, costs, renewal dates, billing cycles, categories, payment
                 methods, and notes you enter manually
               </li>
               <li>
-                <strong className="text-gray-900 dark:text-white">Account Information</strong>: 
+                <strong className="text-gray-900 dark:text-white">Account Information</strong>:
                 Email address and password (for cloud sync features) - stored securely and encrypted
               </li>
               <li>
-                <strong className="text-gray-900 dark:text-white">Receipt/Invoice Data</strong>: 
+                <strong className="text-gray-900 dark:text-white">Receipt/Invoice Data</strong>:
                 Images and documents you upload for OCR processing - processed locally on your device
               </li>
               <li>
-                <strong className="text-gray-900 dark:text-white">Email Content</strong>: 
+                <strong className="text-gray-900 dark:text-white">Email Content</strong>:
                 Email messages you choose to scan (only when you explicitly grant permission and provide credentials)
               </li>
               <li>
-                <strong className="text-gray-900 dark:text-white">SMS Content</strong>: 
+                <strong className="text-gray-900 dark:text-white">SMS Content</strong>:
                 SMS messages you choose to scan (Android only, only when you explicitly grant permission)
               </li>
             </ul>
@@ -67,15 +67,15 @@ export default function PrivacyPolicyAndTerms() {
             </h4>
             <ul className="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300 mb-4">
               <li>
-                <strong className="text-gray-900 dark:text-white">Device Information</strong>: 
+                <strong className="text-gray-900 dark:text-white">Device Information</strong>:
                 Device type, operating system version, app version
               </li>
               <li>
-                <strong className="text-gray-900 dark:text-white">Usage Data</strong>: 
+                <strong className="text-gray-900 dark:text-white">Usage Data</strong>:
                 App features used, error logs (for debugging)
               </li>
               <li>
-                <strong className="text-gray-900 dark:text-white">Analytics</strong>: 
+                <strong className="text-gray-900 dark:text-white">Analytics</strong>:
                 Anonymous usage statistics to improve app performance
               </li>
             </ul>
@@ -85,11 +85,11 @@ export default function PrivacyPolicyAndTerms() {
             </h4>
             <ul className="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300 mb-4">
               <li>
-                <strong className="text-gray-900 dark:text-white">Google Mobile Ads</strong>: 
+                <strong className="text-gray-900 dark:text-white">Google Mobile Ads</strong>:
                 We use AdMob for advertising. AdMob may collect device identifiers and usage data.
               </li>
               <li>
-                <strong className="text-gray-900 dark:text-white">Firebase</strong>: 
+                <strong className="text-gray-900 dark:text-white">Firebase</strong>:
                 We use Firebase for cloud sync and authentication.
               </li>
             </ul>
@@ -102,27 +102,27 @@ export default function PrivacyPolicyAndTerms() {
             </p>
             <ul className="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300 mb-4">
               <li>
-                <strong className="text-gray-900 dark:text-white">Provide Core Services</strong>: 
+                <strong className="text-gray-900 dark:text-white">Provide Core Services</strong>:
                 Manage and track your subscriptions, send reminders, generate analytics
               </li>
               <li>
-                <strong className="text-gray-900 dark:text-white">Email/SMS Scanning</strong>: 
+                <strong className="text-gray-900 dark:text-white">Email/SMS Scanning</strong>:
                 Parse emails and SMS messages to automatically detect subscriptions (only with your explicit permission)
               </li>
               <li>
-                <strong className="text-gray-900 dark:text-white">Receipt OCR</strong>: 
+                <strong className="text-gray-900 dark:text-white">Receipt OCR</strong>:
                 Extract subscription details from receipts and invoices you upload
               </li>
               <li>
-                <strong className="text-gray-900 dark:text-white">Cloud Sync</strong>: 
+                <strong className="text-gray-900 dark:text-white">Cloud Sync</strong>:
                 Synchronize your subscription data across devices (only if you enable this feature)
               </li>
               <li>
-                <strong className="text-gray-900 dark:text-white">Improve Services</strong>: 
+                <strong className="text-gray-900 dark:text-white">Improve Services</strong>:
                 Analyze usage patterns to enhance app functionality
               </li>
               <li>
-                <strong className="text-gray-900 dark:text-white">Advertising</strong>: 
+                <strong className="text-gray-900 dark:text-white">Advertising</strong>:
                 Display relevant ads through Google Mobile Ads
               </li>
             </ul>
@@ -167,20 +167,20 @@ export default function PrivacyPolicyAndTerms() {
             </p>
             <ul className="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300 mb-4">
               <li>
-                <strong className="text-gray-900 dark:text-white">With Your Consent</strong>: 
+                <strong className="text-gray-900 dark:text-white">With Your Consent</strong>:
                 When you explicitly authorize sharing
               </li>
               <li>
-                <strong className="text-gray-900 dark:text-white">Service Providers</strong>: 
-                Trusted third parties who assist in operating our app (Firebase, Google Ads) - 
+                <strong className="text-gray-900 dark:text-white">Service Providers</strong>:
+                Trusted third parties who assist in operating our app (Firebase, Google Ads) -
                 they are bound by confidentiality agreements
               </li>
               <li>
-                <strong className="text-gray-900 dark:text-white">Legal Requirements</strong>: 
+                <strong className="text-gray-900 dark:text-white">Legal Requirements</strong>:
                 When required by law or to protect our rights
               </li>
               <li>
-                <strong className="text-gray-900 dark:text-white">Business Transfers</strong>: 
+                <strong className="text-gray-900 dark:text-white">Business Transfers</strong>:
                 In case of merger, acquisition, or sale of assets (with notice to users)
               </li>
             </ul>
@@ -194,19 +194,19 @@ export default function PrivacyPolicyAndTerms() {
             </h4>
             <ul className="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300 mb-4">
               <li>
-                <strong className="text-gray-900 dark:text-white">View Your Data</strong>: 
+                <strong className="text-gray-900 dark:text-white">View Your Data</strong>:
                 Access all your subscription data within the app
               </li>
               <li>
-                <strong className="text-gray-900 dark:text-white">Edit Data</strong>: 
+                <strong className="text-gray-900 dark:text-white">Edit Data</strong>:
                 Modify or delete any subscription entry
               </li>
               <li>
-                <strong className="text-gray-900 dark:text-white">Export Data</strong>: 
+                <strong className="text-gray-900 dark:text-white">Export Data</strong>:
                 Export your subscription data in standard formats
               </li>
               <li>
-                <strong className="text-gray-900 dark:text-white">Delete Account</strong>: 
+                <strong className="text-gray-900 dark:text-white">Delete Account</strong>:
                 Delete all your data (local and cloud) at any time
               </li>
             </ul>
@@ -216,21 +216,21 @@ export default function PrivacyPolicyAndTerms() {
             </h4>
             <ul className="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300 mb-4">
               <li>
-                <strong className="text-gray-900 dark:text-white">Email Access</strong>: 
-                Only used when you explicitly grant permission and provide credentials. 
+                <strong className="text-gray-900 dark:text-white">Email Access</strong>:
+                Only used when you explicitly grant permission and provide credentials.
                 You can revoke access at any time.
               </li>
               <li>
-                <strong className="text-gray-900 dark:text-white">SMS Access</strong>: 
-                Only used when you explicitly grant permission (Android). 
+                <strong className="text-gray-900 dark:text-white">SMS Access</strong>:
+                Only used when you explicitly grant permission (Android).
                 You can revoke access at any time.
               </li>
               <li>
-                <strong className="text-gray-900 dark:text-white">Camera/Photos</strong>: 
+                <strong className="text-gray-900 dark:text-white">Camera/Photos</strong>:
                 Only used for receipt upload. You can deny this permission.
               </li>
               <li>
-                <strong className="text-gray-900 dark:text-white">Notifications</strong>: 
+                <strong className="text-gray-900 dark:text-white">Notifications</strong>:
                 Used for subscription reminders. You can disable in app settings.
               </li>
             </ul>
@@ -249,8 +249,8 @@ export default function PrivacyPolicyAndTerms() {
               Children's Privacy
             </h3>
             <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
-              Our app is not intended for children under 13 years of age. We do not knowingly 
-              collect personal information from children under 13. If you believe we have collected 
+              Our app is not intended for children under 12 years of age. We do not knowingly
+              collect personal information from children under 13. If you believe we have collected
               information from a child under 13, please contact us immediately.
             </p>
 
@@ -258,8 +258,8 @@ export default function PrivacyPolicyAndTerms() {
               International Data Transfers
             </h3>
             <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
-              If you use cloud sync, your data may be stored on servers located outside your country. 
-              We ensure appropriate safeguards are in place to protect your data in accordance with 
+              If you use cloud sync, your data may be stored on servers located outside your country.
+              We ensure appropriate safeguards are in place to protect your data in accordance with
               this Privacy Policy.
             </p>
 
@@ -268,19 +268,19 @@ export default function PrivacyPolicyAndTerms() {
             </h3>
             <ul className="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300 mb-4">
               <li>
-                <strong className="text-gray-900 dark:text-white">Local Data</strong>: 
+                <strong className="text-gray-900 dark:text-white">Local Data</strong>:
                 Stored on your device until you delete it or uninstall the app
               </li>
               <li>
-                <strong className="text-gray-900 dark:text-white">Cloud Data</strong>: 
+                <strong className="text-gray-900 dark:text-white">Cloud Data</strong>:
                 Retained until you delete your account or disable cloud sync
               </li>
               <li>
-                <strong className="text-gray-900 dark:text-white">Email/SMS Credentials</strong>: 
+                <strong className="text-gray-900 dark:text-white">Email/SMS Credentials</strong>:
                 Not stored - only used during active scanning sessions
               </li>
               <li>
-                <strong className="text-gray-900 dark:text-white">Receipt Images</strong>: 
+                <strong className="text-gray-900 dark:text-white">Receipt Images</strong>:
                 Processed locally and not retained after processing
               </li>
             </ul>
@@ -344,8 +344,8 @@ export default function PrivacyPolicyAndTerms() {
               Agreement to Terms
             </h3>
             <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
-              By downloading, installing, accessing, or using the SubsWatcher mobile application 
-              ("App"), you agree to be bound by these Terms of Service ("Terms"). If you do not 
+              By downloading, installing, accessing, or using the SubsWatcher mobile application
+              ("App"), you agree to be bound by these Terms of Service ("Terms"). If you do not
               agree to these Terms, do not use the App.
             </p>
 
@@ -367,7 +367,7 @@ export default function PrivacyPolicyAndTerms() {
               Eligibility
             </h3>
             <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
-              You must be at least 13 years old to use this App. If you are under 18, you represent 
+              You must be at least 12 years old to use this App. If you are under 18, you represent
               that you have your parent's or guardian's permission to use the App.
             </p>
 
@@ -445,11 +445,11 @@ export default function PrivacyPolicyAndTerms() {
             </h4>
             <ul className="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300 mb-4">
               <li>
-                The App provides tools to help you track subscriptions, but you are responsible 
+                The App provides tools to help you track subscriptions, but you are responsible
                 for verifying the accuracy of information
               </li>
               <li>
-                We are not responsible for errors in subscription data you enter or that is 
+                We are not responsible for errors in subscription data you enter or that is
                 extracted from emails/SMS/receipts
               </li>
               <li>Always verify extracted information before adding subscriptions</li>
@@ -551,8 +551,8 @@ export default function PrivacyPolicyAndTerms() {
               No Warranty
             </h4>
             <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4 font-semibold">
-              THE APP IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, 
-              EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, 
+              THE APP IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND,
+              EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY,
               FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT.
             </p>
 
@@ -574,7 +574,7 @@ export default function PrivacyPolicyAndTerms() {
               Indemnification
             </h3>
             <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">
-              You agree to indemnify and hold us harmless from any claims, damages, losses, 
+              You agree to indemnify and hold us harmless from any claims, damages, losses,
               liabilities, and expenses (including legal fees) arising from:
             </p>
             <ul className="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300 mb-4">
@@ -629,7 +629,7 @@ export default function PrivacyPolicyAndTerms() {
               Governing Law
             </h3>
             <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
-              These Terms shall be governed by and construed in accordance with the laws of 
+              These Terms shall be governed by and construed in accordance with the laws of
               [Your Jurisdiction], without regard to its conflict of law provisions.
             </p>
 
@@ -648,7 +648,7 @@ export default function PrivacyPolicyAndTerms() {
               Arbitration
             </h4>
             <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
-              Any disputes that cannot be resolved informally shall be resolved through binding 
+              Any disputes that cannot be resolved informally shall be resolved through binding
               arbitration in accordance with applicable rules, except where prohibited by law.
             </p>
 
@@ -656,7 +656,7 @@ export default function PrivacyPolicyAndTerms() {
               Severability
             </h3>
             <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
-              If any provision of these Terms is found to be unenforceable, the remaining 
+              If any provision of these Terms is found to be unenforceable, the remaining
               provisions will remain in full effect.
             </p>
 
@@ -664,7 +664,7 @@ export default function PrivacyPolicyAndTerms() {
               Entire Agreement
             </h3>
             <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
-              These Terms, together with our Privacy Policy, constitute the entire agreement 
+              These Terms, together with our Privacy Policy, constitute the entire agreement
               between you and us regarding the App.
             </p>
 
@@ -688,7 +688,7 @@ export default function PrivacyPolicyAndTerms() {
             </h3>
             <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
               <p className="text-gray-700 dark:text-gray-300 font-semibold mb-2">
-                BY USING THE APP, YOU ACKNOWLEDGE THAT YOU HAVE READ, UNDERSTOOD, AND AGREE TO 
+                BY USING THE APP, YOU ACKNOWLEDGE THAT YOU HAVE READ, UNDERSTOOD, AND AGREE TO
                 BE BOUND BY THESE TERMS OF SERVICE.
               </p>
               <p className="text-sm text-gray-600 dark:text-gray-400">
