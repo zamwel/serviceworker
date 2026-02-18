@@ -216,32 +216,32 @@ export default function FemCareLanding() {
                         <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent z-20 h-full bottom-0"></div>
                         <div className="flex justify-center items-end gap-4 md:gap-8 overflow-hidden px-4">
                             {/* Left Screen */}
-                            <div className="w-1/3 max-w-[280px] transform translate-y-12 rotate-[-6deg] hover:rotate-0 transition duration-500 z-0">
-                                <div className="bg-white rounded-[2.5rem] shadow-2xl border-8 border-gray-900 overflow-hidden aspect-[9/19.5]">
+                            <div className="w-1/3 max-w-[280px] transform translate-y-12 rotate-[-6deg] hover:rotate-0 transition duration-500 z-0 text-center">
+                                <div className="bg-white shadow-2xl overflow-hidden ">
                                     <div className="w-full h-full bg-gray-100 flex items-center justify-center">
-                                        <Calendar className="w-12 h-12 text-gray-300" />
+                                        <img src="/images/img2.png" alt="App Screen 2" className="w-full h-full object-contain" />
                                     </div>
                                 </div>
+                                <p className="mt-4 text-sm font-medium text-pink-500 opacity-0 group-hover:opacity-100 transition">Period Tracking</p>
                             </div>
 
                             {/* Center Screen (Main) */}
-                            <div className="w-1/3 max-w-[320px] transform z-10 hover:-translate-y-4 transition duration-500">
-                                <div className="bg-white rounded-[3rem] shadow-2xl border-8 border-gray-900 overflow-hidden aspect-[9/19.5]">
-                                    <div className="w-full h-full bg-pink-50 flex flex-col items-center justify-center p-6 text-center">
-                                        <Heart className="w-20 h-20 text-pink-500 mb-4" />
-                                        <h3 className="text-xl font-bold text-gray-800">Daily Insights</h3>
-                                        <p className="text-sm text-gray-500 mt-2">Personalized health predictions just for you.</p>
+                            <div className="w-1/3 max-w-[320px] transform z-10 hover:-translate-y-4 transition duration-500 text-center">
+                                <div className="bg-white shadow-2xl overflow-hidden ">
+                                    <div className="w-full h-full bg-pink-50 flex items-center justify-center relative">
+                                        <img src="/images/img1.png" alt="App Screen 1" className="w-full h-full object-contain" />
                                     </div>
                                 </div>
                             </div>
 
                             {/* Right Screen */}
-                            <div className="w-1/3 max-w-[280px] transform translate-y-12 rotate-[6deg] hover:rotate-0 transition duration-500 z-0">
-                                <div className="bg-white rounded-[2.5rem] shadow-2xl border-8 border-gray-900 overflow-hidden aspect-[9/19.5]">
+                            <div className="w-1/3 max-w-[280px] transform translate-y-12 rotate-[6deg] hover:rotate-0 transition duration-500 z-0 text-center">
+                                <div className="bg-white shadow-2xl overflow-hidden ">
                                     <div className="w-full h-full bg-gray-100 flex items-center justify-center">
-                                        <Users className="w-12 h-12 text-gray-300" />
+                                        <img src="/images/img3.png" alt="App Screen 3" className="w-full h-full object-contain" />
                                     </div>
                                 </div>
+                                <p className="mt-4 text-sm font-medium text-pink-500 opacity-0 group-hover:opacity-100 transition">Community Support</p>
                             </div>
                         </div>
                     </div>

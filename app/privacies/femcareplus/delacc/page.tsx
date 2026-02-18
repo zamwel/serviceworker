@@ -42,7 +42,7 @@ export default function FemCareDeleteAccount() {
                             FemCare+
                         </span>
                     </div>
-                    <a href="../" className="text-sm font-medium text-gray-500 hover:text-pink-600 transition">Back to Home</a>
+                    <a href="./" className="text-sm font-medium text-gray-500 hover:text-pink-600 transition">Back to Home</a>
                 </div>
             </nav>
 
