@@ -62,7 +62,7 @@ const EULA = () => {
                     <section className="bg-gradient-to-br from-red-600/10 to-transparent p-10 rounded-[40px] border border-red-500/10">
                         <h2 className="text-2xl font-bold mb-6 text-white">Disclaimer of Warranties</h2>
                         <p className="text-sm italic">
-                            THE APPLICATION IS PROVIDED TO YOU "AS IS" AND "AS AVAILABLE" AND WITH ALL FAULTS AND DEFECTS WITHOUT WARRANTY OF ANY KIND.
+                            THE APPLICATION IS PROVIDED TO YOU &quot;AS IS&quot; AND &quot;AS AVAILABLE&quot; AND WITH ALL FAULTS AND DEFECTS WITHOUT WARRANTY OF ANY KIND.
                         </p>
                     </section>
 

@@ -58,3 +58,47 @@ model FlashCryptoReward {
   referer   String   @default("")
   createdAt DateTime @default(now())
 }
+
+/// Generic, multi-app promo/redemption system. Every app (Muvees, FemCarePlus,
+/// SubsWatcher, InMeasure, InDocEdit, and future apps) routes through these two
+/// tables — scoped by `appId` — so the redemption backend is built only once.
+///
+/// Redemption is bound to a device's stable hardware ID, which lets a grant
+/// survive reinstalls with no user sign-in required.
+model PromoCoupon {
+  id             String            @id @default(cuid())
+  appId          String // e.g. "muvees", "femcareplus", "subswatcher"
+  code           String
+  rewardType     String            @default("lifetime") // lifetime | subscription | credits
+  durationDays   Int? // for subscription grants
+  creditAmount   Int? // for credit grants
+  maxRedemptions Int               @default(1) // total uses; <= 0 means unlimited
+  redeemedCount  Int               @default(0)
+  active         Boolean           @default(true)
+  expiresAt      DateTime? // coupon validity window (not the granted Pro)
+  note           String            @default("")
+  createdAt      DateTime          @default(now())
+  redemptions    PromoRedemption[]
+
+  @@unique([appId, code]) // the same code string may exist across different apps
+  @@index([appId])
+}
+
+/// A single device's redemption of a coupon. One row per (coupon, device).
+model PromoRedemption {
+  id             String      @id @default(cuid())
+  appId          String
+  couponId       String
+  coupon         PromoCoupon @relation(fields: [couponId], references: [id], onDelete: Cascade)
+  code           String
+  deviceId       String
+  rewardType     String
+  durationDays   Int?
+  creditAmount   Int?
+  grantExpiresAt DateTime? // when the granted Pro expires (null = lifetime)
+  revoked        Boolean     @default(false)
+  createdAt      DateTime    @default(now())
+
+  @@unique([couponId, deviceId]) // one redemption per device per coupon
+  @@index([appId, deviceId]) // fast device-grant lookup per app
+}
