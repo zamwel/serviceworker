@@ -146,6 +146,6 @@ export function Footer() {
       <div className="border-t border-white/5 py-6 text-center text-sm text-gray-500">
         © {new Date().getFullYear()} {APP.name} · <Link href="https://codeinktechnologies.com/" className="hover:underline" target="_blank" rel="noopener noreferrer">{APP.company}</Link>. All rights reserved.
       </div>
-    </footer>
+    </footer> 
   );
 }

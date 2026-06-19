@@ -1,6 +1,17 @@
 import type { PromoRedemption } from "@prisma/client";
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
 import prisma from "@/lib/prisma";
+
+/** Generate a human-friendly random coupon code (no ambiguous chars). */
+export function generateCode(prefix = "", length = 8): string {
+  const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; // excludes I, O, 0, 1
+  const bytes = crypto.randomBytes(length);
+  let body = "";
+  for (let i = 0; i < length; i++) body += alphabet[bytes[i] % alphabet.length];
+  const clean = prefix.toUpperCase().replace(/[^A-Z0-9]/g, "");
+  return clean ? `${clean}-${body}` : body;
+}
 
 /* Lifetime grants get a long token lease so they keep working offline
    effectively forever; subscription tokens expire with the subscription. */
