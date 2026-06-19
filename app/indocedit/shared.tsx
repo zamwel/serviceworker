@@ -141,7 +141,7 @@ export function Footer() {
             <li><Link href="/indocedit/legal?tab=privacy" className="hover:text-white transition-colors">Privacy</Link></li>
             <li><Link href="/indocedit/legal?tab=tos" className="hover:text-white transition-colors">Terms</Link></li>
           </ul>
-        </div>
+        </div> 
       </div>
       <div className="border-t border-white/5 py-6 text-center text-sm text-gray-500">
         © {new Date().getFullYear()} {APP.name} · <Link href="https://codeinktechnologies.com/" className="hover:underline" target="_blank" rel="noopener noreferrer">{APP.company}</Link>. All rights reserved.
