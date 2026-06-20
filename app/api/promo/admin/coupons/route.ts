@@ -160,15 +160,23 @@ export async function PATCH(req: Request) {
   }
 }
 
-// DELETE /api/promo/admin/coupons?id=...  (cascades to its redemptions)
+// DELETE /api/promo/admin/coupons?id=<single>  — or —  ?ids=id1,id2,id3
+// Both cascade to their redemptions via the Prisma onDelete: Cascade relation.
 export async function DELETE(req: Request) {
   if (!authorized(req)) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   }
   try {
     const { searchParams } = new URL(req.url);
-    const id = searchParams.get("id");
-    if (!id) return NextResponse.json({ message: "id is required" }, { status: 400 });
+    const ids = searchParams.get("ids")?.split(",").map((s) => s.trim()).filter(Boolean);
+    const id  = searchParams.get("id");
+
+    if (ids && ids.length > 0) {
+      const { count } = await prisma.promoCoupon.deleteMany({ where: { id: { in: ids } } });
+      return NextResponse.json({ success: true, deleted: count }, { status: 200 });
+    }
+
+    if (!id) return NextResponse.json({ message: "id or ids is required" }, { status: 400 });
     await prisma.promoCoupon.delete({ where: { id } });
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error: any) {
