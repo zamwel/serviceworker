@@ -43,6 +43,13 @@ export default function PromoAdmin() {
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [bulkWorking, setBulkWorking] = useState(false);
 
+  // broadcast notification
+  const [notifTitle, setNotifTitle] = useState("");
+  const [notifBody, setNotifBody] = useState("");
+  const [notifImage, setNotifImage] = useState("");
+  const [notifSending, setNotifSending] = useState(false);
+  const [notifStatus, setNotifStatus] = useState<string | null>(null);
+
   // form
   const [mode, setMode] = useState<"single" | "bulk">("single");
   const [code, setCode] = useState("");
@@ -183,6 +190,34 @@ export default function PromoAdmin() {
   }
 
   // ─────────────────────────────────────────────────────────────────────────
+
+  async function sendNotification() {
+    if (!notifTitle.trim() || !notifBody.trim()) return;
+    setNotifSending(true);
+    setNotifStatus(null);
+    try {
+      const res = await fetch("/api/promo/admin/notify", {
+        method: "POST",
+        headers: headers(),
+        body: JSON.stringify({
+          title: notifTitle.trim(),
+          body: notifBody.trim(),
+          imageUrl: notifImage.trim() || undefined,
+        }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setNotifStatus("✓ Broadcast sent to all users!");
+        setNotifTitle(""); setNotifBody(""); setNotifImage("");
+      } else {
+        setNotifStatus(`✗ Failed: ${data.error ?? data.message ?? "Unknown error"}`);
+      }
+    } catch {
+      setNotifStatus("✗ Network error sending broadcast.");
+    } finally {
+      setNotifSending(false);
+    }
+  }
 
   function copyCodes() { navigator.clipboard.writeText(generated.join("\n")); }
 
@@ -471,6 +506,50 @@ export default function PromoAdmin() {
             )}
           </div>
         </div>
+
+        {/* ── Broadcast Notification ───────────────────────────────────── */}
+        <div className="mt-8 bg-white/5 border border-white/10 rounded-3xl p-6">
+          <h2 className="text-lg font-bold mb-1">Broadcast Notification</h2>
+          <p className="text-gray-400 text-sm mb-5">
+            Sends a push notification to all users subscribed to the <span className="text-white font-mono">all</span> topic.
+            Requires <span className="text-white font-mono">FIREBASE_SERVICE_ACCOUNT_JSON</span> to be set in the server environment.
+          </p>
+
+          <div className="grid sm:grid-cols-2 gap-4">
+            <div>
+              <span className={label}>Title</span>
+              <input className={input} placeholder="e.g. New movies this week!" value={notifTitle}
+                onChange={(e) => setNotifTitle(e.target.value)} />
+            </div>
+            <div>
+              <span className={label}>Image URL (optional)</span>
+              <input className={input} placeholder="https://…/banner.jpg" value={notifImage}
+                onChange={(e) => setNotifImage(e.target.value)} />
+            </div>
+          </div>
+
+          <div className="mt-4">
+            <span className={label}>Message body</span>
+            <textarea className={`${input} resize-none`} rows={3}
+              placeholder="e.g. Check out this week's latest arrivals…"
+              value={notifBody} onChange={(e) => setNotifBody(e.target.value)} />
+          </div>
+
+          <div className="mt-4 flex items-center gap-4">
+            <button onClick={sendNotification}
+              disabled={notifSending || !notifTitle.trim() || !notifBody.trim()}
+              className="bg-red-600 hover:bg-red-500 disabled:opacity-40 font-bold px-6 py-3 rounded-xl transition-colors">
+              {notifSending ? "Sending…" : "Send to All Users"}
+            </button>
+
+            {notifStatus && (
+              <p className={`text-sm font-medium ${notifStatus.startsWith("✓") ? "text-green-400" : "text-red-400"}`}>
+                {notifStatus}
+              </p>
+            )}
+          </div>
+        </div>
+
       </div>
     </div>
   );
