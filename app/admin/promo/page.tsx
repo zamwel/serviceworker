@@ -34,6 +34,10 @@ export default function PromoAdmin() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [generated, setGenerated] = useState<string[]>([]);
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const [pages, setPages] = useState(1);
+  const [search, setSearch] = useState("");
 
   // form
   const [mode, setMode] = useState<"single" | "bulk">("single");
@@ -58,13 +62,12 @@ export default function PromoAdmin() {
     [secret]
   );
 
-  const load = useCallback(async () => {
+  const load = useCallback(async (p = page, q = search) => {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch(`/api/promo/admin/coupons?appId=${appId}`, {
-        headers: headers(),
-      });
+      const url = `/api/promo/admin/coupons?appId=${appId}&page=${p}&limit=50${q ? `&q=${encodeURIComponent(q)}` : ""}`;
+      const res = await fetch(url, { headers: headers() });
       if (res.status === 401) {
         setError("Unauthorized — check the admin secret.");
         setAuthed(false);
@@ -73,16 +76,19 @@ export default function PromoAdmin() {
       }
       const data = await res.json();
       setCoupons(data.coupons ?? []);
+      setTotal(data.total ?? 0);
+      setPages(data.pages ?? 1);
     } catch {
       setError("Failed to load coupons.");
     } finally {
       setLoading(false);
     }
-  }, [appId, headers]);
+  }, [appId, headers, page, search]);
 
   useEffect(() => {
-    if (authed) load();
-  }, [authed, appId, load]);
+    if (authed) { setPage(1); load(1, search); }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [authed, appId]);
 
   function saveSecret() {
     if (!secret.trim()) return;
@@ -360,11 +366,28 @@ export default function PromoAdmin() {
 
           {/* List panel */}
           <div className="bg-white/5 border border-white/10 rounded-3xl p-6 overflow-hidden">
-            <div className="flex items-center justify-between mb-5">
-              <h2 className="text-lg font-bold">Coupons ({coupons.length})</h2>
-              <button onClick={load} className="text-sm text-gray-400 hover:text-white">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-bold">
+                Coupons{total > 0 ? ` (${total})` : ""}
+              </h2>
+              <button onClick={() => load(page, search)} className="text-sm text-gray-400 hover:text-white">
                 Refresh
               </button>
+            </div>
+
+            {/* Search */}
+            <div className="mb-4">
+              <input
+                className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm text-white placeholder-gray-500 focus:border-red-500/50 focus:outline-none"
+                placeholder="Search code…"
+                value={search}
+                onChange={(e) => {
+                  const q = e.target.value.toUpperCase();
+                  setSearch(q);
+                  setPage(1);
+                  load(1, q);
+                }}
+              />
             </div>
 
             {loading && coupons.length === 0 ? (
@@ -432,6 +455,31 @@ export default function PromoAdmin() {
                     ))}
                   </tbody>
                 </table>
+              </div>
+            )}
+
+            {/* Pagination */}
+            {pages > 1 && (
+              <div className="flex items-center justify-between mt-5 text-sm">
+                <span className="text-gray-500">
+                  Page {page} of {pages} · {total} total
+                </span>
+                <div className="flex gap-2">
+                  <button
+                    disabled={page <= 1 || loading}
+                    onClick={() => { const p = page - 1; setPage(p); load(p, search); }}
+                    className="px-3 py-1.5 rounded-lg bg-white/5 text-gray-300 hover:bg-white/10 disabled:opacity-30"
+                  >
+                    ← Prev
+                  </button>
+                  <button
+                    disabled={page >= pages || loading}
+                    onClick={() => { const p = page + 1; setPage(p); load(p, search); }}
+                    className="px-3 py-1.5 rounded-lg bg-white/5 text-gray-300 hover:bg-white/10 disabled:opacity-30"
+                  >
+                    Next →
+                  </button>
+                </div>
               </div>
             )}
           </div>

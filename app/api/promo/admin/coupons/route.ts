@@ -102,7 +102,7 @@ export async function POST(req: Request) {
   }
 }
 
-// GET /api/promo/admin/coupons?appId=muvees  → list coupons (+ redeemed counts)
+// GET /api/promo/admin/coupons?appId=muvees&page=1&limit=50&q=MV
 export async function GET(req: Request) {
   if (!authorized(req)) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
@@ -110,12 +110,24 @@ export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
     const appId = searchParams.get("appId") ?? undefined;
-    const coupons = await prisma.promoCoupon.findMany({
-      where: appId ? { appId } : undefined,
-      orderBy: { createdAt: "desc" },
-      include: { _count: { select: { redemptions: true } } },
-    });
-    return NextResponse.json({ coupons }, { status: 200 });
+    const page = Math.max(1, parseInt(searchParams.get("page") ?? "1"));
+    const limit = Math.min(200, Math.max(1, parseInt(searchParams.get("limit") ?? "50")));
+    const q = (searchParams.get("q") ?? "").trim().toUpperCase();
+    const where = {
+      ...(appId ? { appId } : {}),
+      ...(q ? { code: { contains: q } } : {}),
+    };
+    const [coupons, total] = await Promise.all([
+      prisma.promoCoupon.findMany({
+        where,
+        orderBy: { createdAt: "desc" },
+        skip: (page - 1) * limit,
+        take: limit,
+        include: { _count: { select: { redemptions: true } } },
+      }),
+      prisma.promoCoupon.count({ where }),
+    ]);
+    return NextResponse.json({ coupons, total, page, limit, pages: Math.ceil(total / limit) }, { status: 200 });
   } catch (error: any) {
     return NextResponse.json({ message: error?.message }, { status: 400 });
   }
