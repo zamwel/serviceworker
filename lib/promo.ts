@@ -125,6 +125,7 @@ export async function redeemCoupon(
       ? new Date(Date.now() + coupon.durationDays * 86_400_000)
       : null;
 
+  const newCount = coupon.redeemedCount + 1;
   const [redemption] = await prisma.$transaction([
     prisma.promoRedemption.create({
       data: {
@@ -140,7 +141,14 @@ export async function redeemCoupon(
     }),
     prisma.promoCoupon.update({
       where: { id: coupon.id },
-      data: { redeemedCount: { increment: 1 } },
+      data: {
+        redeemedCount: { increment: 1 },
+        // Auto-disable once all slots are consumed so the admin panel
+        // immediately reflects "redeemed" rather than still showing "active".
+        ...(coupon.maxRedemptions > 0 && newCount >= coupon.maxRedemptions
+          ? { active: false }
+          : {}),
+      },
     }),
   ]);
 

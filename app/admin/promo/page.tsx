@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { APPS, DEFAULT_APP, findApp } from "@/lib/apps";
 
 /* ───────────────────────────────────────────────────────────────────────────
    Promo admin dashboard — manage coupons for every app from one place.
@@ -24,12 +25,10 @@ type Coupon = {
   _count?: { redemptions: number };
 };
 
-const APPS = ["muvees", "femcareplus", "subswatcher", "inmeasure", "indocedit"];
-
 export default function PromoAdmin() {
   const [secret, setSecret] = useState("");
   const [authed, setAuthed] = useState(false);
-  const [appId, setAppId] = useState("muvees");
+  const [appId, setAppId] = useState(DEFAULT_APP.id);
   const [coupons, setCoupons] = useState<Coupon[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -54,7 +53,7 @@ export default function PromoAdmin() {
   const [mode, setMode] = useState<"single" | "bulk">("single");
   const [code, setCode] = useState("");
   const [count, setCount] = useState(50);
-  const [prefix, setPrefix] = useState("MV");
+  const [prefix, setPrefix] = useState(DEFAULT_APP.prefix);
   const [rewardType, setRewardType] = useState("lifetime");
   const [durationDays, setDurationDays] = useState(30);
   const [maxRedemptions, setMaxRedemptions] = useState(1);
@@ -203,6 +202,7 @@ export default function PromoAdmin() {
           title: notifTitle.trim(),
           body: notifBody.trim(),
           imageUrl: notifImage.trim() || undefined,
+          topic: findApp(appId)?.fcmTopic ?? "all",
         }),
       });
       const data = await res.json();
@@ -272,12 +272,12 @@ export default function PromoAdmin() {
         {/* App selector */}
         <div className="flex flex-wrap gap-2 mb-8">
           {APPS.map((a) => (
-            <button key={a} onClick={() => setAppId(a)}
+            <button key={a.id} onClick={() => { setAppId(a.id); setPrefix(a.prefix); }}
               className={`px-4 py-2 rounded-xl text-sm font-bold transition-colors ${
-                appId === a ? "bg-red-600 text-white" : "bg-white/5 text-gray-400 hover:bg-white/10"
+                appId === a.id ? "bg-red-600 text-white" : "bg-white/5 text-gray-400 hover:bg-white/10"
               }`}
             >
-              {a}
+              {a.name}
             </button>
           ))}
         </div>
@@ -457,11 +457,16 @@ export default function PromoAdmin() {
                           {c.redeemedCount}{c.maxRedemptions > 0 ? ` / ${c.maxRedemptions}` : " / ∞"}
                         </td>
                         <td className="py-2.5 pr-4">
-                          <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${
-                            c.active ? "bg-green-500/15 text-green-400" : "bg-gray-500/15 text-gray-400"
-                          }`}>
-                            {c.active ? "active" : "disabled"}
-                          </span>
+                          {(() => {
+                            const fullyRedeemed = c.maxRedemptions > 0 && c.redeemedCount >= c.maxRedemptions;
+                            const label = !c.active && fullyRedeemed ? "redeemed" : !c.active ? "disabled" : "active";
+                            const cls = label === "redeemed"
+                              ? "bg-amber-500/15 text-amber-400"
+                              : label === "disabled"
+                              ? "bg-gray-500/15 text-gray-400"
+                              : "bg-green-500/15 text-green-400";
+                            return <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${cls}`}>{label}</span>;
+                          })()}
                         </td>
                         <td className="py-2.5 text-right whitespace-nowrap">
                           <button onClick={() => patch(c.id, { active: !c.active })}
@@ -511,7 +516,9 @@ export default function PromoAdmin() {
         <div className="mt-8 bg-white/5 border border-white/10 rounded-3xl p-6">
           <h2 className="text-lg font-bold mb-1">Broadcast Notification</h2>
           <p className="text-gray-400 text-sm mb-5">
-            Sends a push notification to all users subscribed to the <span className="text-white font-mono">all</span> topic.
+            Sends a push notification to topic{" "}
+            <span className="text-white font-mono">{findApp(appId)?.fcmTopic ?? "all"}</span>
+            {" "}(all {findApp(appId)?.name ?? appId} users).
             Requires <span className="text-white font-mono">FIREBASE_SERVICE_ACCOUNT_JSON</span> to be set in the server environment.
           </p>
 
