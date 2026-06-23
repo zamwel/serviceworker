@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { APPS, DEFAULT_APP, findApp } from "@/lib/apps";
+import { APPS, DEFAULT_APP, findApp, type OfferItem } from "@/lib/apps";
 
 /* ───────────────────────────────────────────────────────────────────────────
    Promo admin dashboard — manage coupons for every app from one place.
@@ -46,6 +46,7 @@ export default function PromoAdmin() {
   const [notifTitle, setNotifTitle] = useState("");
   const [notifBody, setNotifBody] = useState("");
   const [notifImage, setNotifImage] = useState("");
+  const [notifTopic, setNotifTopic] = useState(DEFAULT_APP.fcmTopic);
   const [notifSending, setNotifSending] = useState(false);
   const [notifStatus, setNotifStatus] = useState<string | null>(null);
 
@@ -202,7 +203,7 @@ export default function PromoAdmin() {
           title: notifTitle.trim(),
           body: notifBody.trim(),
           imageUrl: notifImage.trim() || undefined,
-          topic: findApp(appId)?.fcmTopic ?? "all",
+          topic: notifTopic.trim() || "all",
         }),
       });
       const data = await res.json();
@@ -231,6 +232,9 @@ export default function PromoAdmin() {
 
   const input =
     "w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white placeholder-gray-500 focus:border-red-500/50 focus:outline-none";
+  // Native <select> option colours aren't controlled by CSS on all browsers;
+  // give them an explicit dark background so they don't render white-on-white.
+  const selectInput = `${input} [&>option]:bg-[#1a1a1a] [&>option]:text-white`;
   const label = "text-xs font-bold uppercase tracking-wider text-gray-400 mb-1.5 block";
 
   /* ── Auth gate ─────────────────────────────────────────────────────────── */
@@ -272,7 +276,7 @@ export default function PromoAdmin() {
         {/* App selector */}
         <div className="flex flex-wrap gap-2 mb-8">
           {APPS.map((a) => (
-            <button key={a.id} onClick={() => { setAppId(a.id); setPrefix(a.prefix); }}
+            <button key={a.id} onClick={() => { setAppId(a.id); setPrefix(a.prefix); setNotifTopic(a.fcmTopic); }}
               className={`px-4 py-2 rounded-xl text-sm font-bold transition-colors ${
                 appId === a.id ? "bg-red-600 text-white" : "bg-white/5 text-gray-400 hover:bg-white/10"
               }`}
@@ -322,7 +326,7 @@ export default function PromoAdmin() {
 
             <div className="mb-4">
               <span className={label}>Reward</span>
-              <select className={input} value={rewardType} onChange={(e) => setRewardType(e.target.value)}>
+              <select className={selectInput} value={rewardType} onChange={(e) => setRewardType(e.target.value)}>
                 <option value="lifetime">Lifetime Pro</option>
                 <option value="subscription">Subscription (days)</option>
                 <option value="credits">Credits</option>
@@ -512,17 +516,23 @@ export default function PromoAdmin() {
           </div>
         </div>
 
+        {/* ── App Offers ───────────────────────────────────────────────── */}
+        <OffersPanel appId={appId} label={label} input={input} />
+
         {/* ── Broadcast Notification ───────────────────────────────────── */}
         <div className="mt-8 bg-white/5 border border-white/10 rounded-3xl p-6">
           <h2 className="text-lg font-bold mb-1">Broadcast Notification</h2>
           <p className="text-gray-400 text-sm mb-5">
-            Sends a push notification to topic{" "}
-            <span className="text-white font-mono">{findApp(appId)?.fcmTopic ?? "all"}</span>
-            {" "}(all {findApp(appId)?.name ?? appId} users).
+            Sends a push notification to any FCM topic. Devices must be subscribed to that topic to receive it.
             Requires <span className="text-white font-mono">FIREBASE_SERVICE_ACCOUNT_JSON</span> to be set in the server environment.
           </p>
 
-          <div className="grid sm:grid-cols-2 gap-4">
+          <div className="grid sm:grid-cols-3 gap-4">
+            <div>
+              <span className={label}>Topic</span>
+              <input className={input} placeholder="all" value={notifTopic}
+                onChange={(e) => setNotifTopic(e.target.value)} />
+            </div>
             <div>
               <span className={label}>Title</span>
               <input className={input} placeholder="e.g. New movies this week!" value={notifTitle}
@@ -557,6 +567,204 @@ export default function PromoAdmin() {
           </div>
         </div>
 
+      </div>
+    </div>
+  );
+}
+
+/* ── Offers panel ──────────────────────────────────────────────────────────── */
+
+const REWARD_LABELS: Record<string, string> = {
+  lifetime: "Lifetime Pro",
+  subscription: "Subscription",
+  credits: "Credits",
+};
+
+function OffersPanel({
+  appId,
+  label,
+  input,
+}: {
+  appId: string;
+  label: string;
+  input: string;
+}) {
+  const app = findApp(appId);
+  const existing: OfferItem[] = app?.offers ?? [];
+
+  const blank = (): Partial<OfferItem> => ({
+    id: "", title: "", description: "", type: "lifetime",
+    price: 0, currency: "USD", isFree: true, badge: "", actionUrl: "",
+  });
+
+  const [form, setForm] = useState<Partial<OfferItem>>(blank());
+  const [offers, setOffers] = useState<OfferItem[]>(existing);
+  const [copied, setCopied] = useState(false);
+
+  // Reset list when app tab changes.
+  useEffect(() => {
+    setOffers(findApp(appId)?.offers ?? []);
+    setForm(blank());
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [appId]);
+
+  function set(k: keyof OfferItem, v: unknown) {
+    setForm((f) => ({ ...f, [k]: v }));
+  }
+
+  function add() {
+    if (!form.id?.trim() || !form.title?.trim()) return;
+    const offer: OfferItem = {
+      id: form.id!.trim(),
+      title: form.title!.trim(),
+      description: (form.description ?? "").trim(),
+      type: (form.type ?? "lifetime") as OfferItem["type"],
+      durationDays: form.type === "subscription" ? (form.durationDays ?? 30) : undefined,
+      price: form.price ?? 0,
+      currency: form.currency ?? "USD",
+      isFree: form.isFree ?? true,
+      badge: form.badge?.trim() || undefined,
+      actionUrl: form.actionUrl?.trim() || undefined,
+    };
+    setOffers((prev) => [...prev, offer]);
+    setForm(blank());
+  }
+
+  function remove(id: string) {
+    setOffers((prev) => prev.filter((o) => o.id !== id));
+  }
+
+  function copyConfig() {
+    const out = JSON.stringify(offers, null, 2);
+    navigator.clipboard.writeText(out);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  }
+
+  const selectCls = `${input} [&>option]:bg-[#1a1a1a] [&>option]:text-white`;
+
+  return (
+    <div className="mt-8 bg-white/5 border border-white/10 rounded-3xl p-6">
+      <div className="flex items-center justify-between mb-1">
+        <h2 className="text-lg font-bold">App Offers · {app?.name ?? appId}</h2>
+        {offers.length > 0 && (
+          <button onClick={copyConfig}
+            className="text-xs px-3 py-1.5 rounded-lg bg-white/5 text-gray-300 hover:bg-white/10">
+            {copied ? "✓ Copied!" : "Copy JSON"}
+          </button>
+        )}
+      </div>
+      <p className="text-gray-400 text-sm mb-5">
+        Define promotional offer cards shown inside the app&apos;s Offers screen.
+        Add entries here, then paste the generated JSON into the{" "}
+        <span className="text-white font-mono">offers</span> field for{" "}
+        <span className="text-white font-mono">{appId}</span> in{" "}
+        <span className="text-white font-mono">lib/apps.ts</span>.
+      </p>
+
+      {/* Existing offers */}
+      {offers.length > 0 && (
+        <div className="mb-6 space-y-2">
+          {offers.map((o) => (
+            <div key={o.id}
+              className="flex items-center justify-between px-4 py-3 rounded-xl bg-black/30 border border-white/10">
+              <div>
+                <span className="font-semibold text-sm text-white">{o.title}</span>
+                <span className="ml-2 text-xs text-gray-400">{REWARD_LABELS[o.type] ?? o.type}</span>
+                {o.badge && (
+                  <span className="ml-2 text-xs px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400 font-bold">
+                    {o.badge}
+                  </span>
+                )}
+                {o.isFree && (
+                  <span className="ml-2 text-xs px-1.5 py-0.5 rounded bg-green-500/20 text-green-400 font-bold">
+                    FREE
+                  </span>
+                )}
+              </div>
+              <button onClick={() => remove(o.id)}
+                className="text-xs text-red-400 hover:text-red-300">Remove</button>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Add form */}
+      <div className="border border-white/10 rounded-2xl p-4 space-y-3">
+        <p className="text-xs font-bold uppercase tracking-wider text-gray-400">Add offer</p>
+        <div className="grid sm:grid-cols-2 gap-3">
+          <div>
+            <span className={label}>ID (unique slug)</span>
+            <input className={input} placeholder="muvees-launch-2025"
+              value={form.id ?? ""} onChange={(e) => set("id", e.target.value)} />
+          </div>
+          <div>
+            <span className={label}>Title</span>
+            <input className={input} placeholder="Launch Special"
+              value={form.title ?? ""} onChange={(e) => set("title", e.target.value)} />
+          </div>
+        </div>
+
+        <div>
+          <span className={label}>Description</span>
+          <input className={input} placeholder="Redeem a promo code for free lifetime Pro access."
+            value={form.description ?? ""} onChange={(e) => set("description", e.target.value)} />
+        </div>
+
+        <div className="grid sm:grid-cols-3 gap-3">
+          <div>
+            <span className={label}>Reward type</span>
+            <select className={selectCls} value={form.type ?? "lifetime"}
+              onChange={(e) => set("type", e.target.value as OfferItem["type"])}>
+              <option value="lifetime">Lifetime Pro</option>
+              <option value="subscription">Subscription</option>
+              <option value="credits">Credits</option>
+            </select>
+          </div>
+          {form.type === "subscription" && (
+            <div>
+              <span className={label}>Duration (days)</span>
+              <input type="number" className={input} value={form.durationDays ?? 30}
+                onChange={(e) => set("durationDays", parseInt(e.target.value) || 0)} />
+            </div>
+          )}
+          <div>
+            <span className={label}>Badge (optional)</span>
+            <input className={input} placeholder="LIMITED"
+              value={form.badge ?? ""} onChange={(e) => set("badge", e.target.value.toUpperCase())} />
+          </div>
+        </div>
+
+        <div className="grid sm:grid-cols-3 gap-3 items-end">
+          <div>
+            <span className={label}>Price</span>
+            <input type="number" className={input} value={form.price ?? 0}
+              onChange={(e) => set("price", parseFloat(e.target.value) || 0)} />
+          </div>
+          <div>
+            <span className={label}>Currency</span>
+            <input className={input} placeholder="USD" value={form.currency ?? "USD"}
+              onChange={(e) => set("currency", e.target.value.toUpperCase())} />
+          </div>
+          <label className="flex items-center gap-2 cursor-pointer pb-2.5">
+            <input type="checkbox" className="accent-red-500 w-4 h-4"
+              checked={form.isFree ?? true}
+              onChange={(e) => set("isFree", e.target.checked)} />
+            <span className="text-sm text-gray-300">Mark as free</span>
+          </label>
+        </div>
+
+        <div>
+          <span className={label}>Action URL (optional)</span>
+          <input className={input} placeholder="https://…"
+            value={form.actionUrl ?? ""} onChange={(e) => set("actionUrl", e.target.value)} />
+        </div>
+
+        <button onClick={add}
+          disabled={!form.id?.trim() || !form.title?.trim()}
+          className="w-full bg-white/10 hover:bg-white/20 disabled:opacity-30 font-bold py-2.5 rounded-xl transition-colors text-sm">
+          + Add offer
+        </button>
       </div>
     </div>
   );
