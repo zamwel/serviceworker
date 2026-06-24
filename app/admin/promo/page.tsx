@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { APPS, DEFAULT_APP, findApp, type OfferItem } from "@/lib/apps";
+import { APPS, DEFAULT_APP, findApp, type AppEntry, type OfferItem } from "@/lib/apps";
 
 /* ───────────────────────────────────────────────────────────────────────────
    Promo admin dashboard — manage coupons for every app from one place.
@@ -29,6 +29,17 @@ export default function PromoAdmin() {
   const [secret, setSecret] = useState("");
   const [authed, setAuthed] = useState(false);
   const [appId, setAppId] = useState(DEFAULT_APP.id);
+
+  // Custom apps added via UI — persisted in localStorage
+  const [customApps, setCustomApps] = useState<AppEntry[]>([]);
+  const allApps = [...APPS, ...customApps];
+
+  // Add-app form
+  const [addingApp, setAddingApp] = useState(false);
+  const [newAppId, setNewAppId]       = useState("");
+  const [newAppName, setNewAppName]   = useState("");
+  const [newAppPrefix, setNewAppPrefix] = useState("");
+  const [newAppTopic, setNewAppTopic] = useState("");
   const [coupons, setCoupons] = useState<Coupon[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -63,7 +74,34 @@ export default function PromoAdmin() {
   useEffect(() => {
     const s = localStorage.getItem("promo_admin_secret");
     if (s) { setSecret(s); setAuthed(true); }
+    const saved = localStorage.getItem("custom_apps");
+    if (saved) { try { setCustomApps(JSON.parse(saved)); } catch { /* ignore */ } }
   }, []);
+
+  function saveCustomApp() {
+    const id = newAppId.trim().toLowerCase().replace(/\s+/g, "-");
+    const name = newAppName.trim();
+    const prefix = newAppPrefix.trim().toUpperCase();
+    const fcmTopic = newAppTopic.trim() || `${id}_all`;
+    if (!id || !name || !prefix) return;
+    if (allApps.some((a) => a.id === id)) return; // duplicate
+    const entry: AppEntry = { id, name, prefix, fcmTopic };
+    const updated = [...customApps, entry];
+    setCustomApps(updated);
+    localStorage.setItem("custom_apps", JSON.stringify(updated));
+    setNewAppId(""); setNewAppName(""); setNewAppPrefix(""); setNewAppTopic("");
+    setAddingApp(false);
+    setAppId(id);
+    setPrefix(prefix);
+    setNotifTopic(fcmTopic);
+  }
+
+  function removeCustomApp(id: string) {
+    const updated = customApps.filter((a) => a.id !== id);
+    setCustomApps(updated);
+    localStorage.setItem("custom_apps", JSON.stringify(updated));
+    if (appId === id) { setAppId(DEFAULT_APP.id); setPrefix(DEFAULT_APP.prefix); }
+  }
 
   const headers = useCallback(
     () => ({ "Content-Type": "application/json", "x-admin-secret": secret }),
@@ -274,17 +312,69 @@ export default function PromoAdmin() {
         </header>
 
         {/* App selector */}
-        <div className="flex flex-wrap gap-2 mb-8">
-          {APPS.map((a) => (
-            <button key={a.id} onClick={() => { setAppId(a.id); setPrefix(a.prefix); setNotifTopic(a.fcmTopic); }}
-              className={`px-4 py-2 rounded-xl text-sm font-bold transition-colors ${
-                appId === a.id ? "bg-red-600 text-white" : "bg-white/5 text-gray-400 hover:bg-white/10"
-              }`}
-            >
-              {a.name}
-            </button>
+        <div className="flex flex-wrap gap-2 mb-4">
+          {allApps.map((a) => (
+            <div key={a.id} className="relative group">
+              <button onClick={() => { setAppId(a.id); setPrefix(a.prefix); setNotifTopic(a.fcmTopic); }}
+                className={`px-4 py-2 rounded-xl text-sm font-bold transition-colors ${
+                  appId === a.id ? "bg-red-600 text-white" : "bg-white/5 text-gray-400 hover:bg-white/10"
+                }`}
+              >
+                {a.name}
+              </button>
+              {/* Remove button — only for custom (non-built-in) apps */}
+              {customApps.some((c) => c.id === a.id) && (
+                <button
+                  onClick={() => removeCustomApp(a.id)}
+                  className="absolute -top-1.5 -right-1.5 hidden group-hover:flex w-4 h-4 rounded-full bg-red-600 text-white text-[10px] items-center justify-center leading-none"
+                  title="Remove app"
+                >×</button>
+              )}
+            </div>
           ))}
+
+          {/* Add app toggle */}
+          <button onClick={() => setAddingApp((v) => !v)}
+            className="px-4 py-2 rounded-xl text-sm font-bold border border-dashed border-white/20 text-gray-500 hover:text-white hover:border-white/40 transition-colors">
+            {addingApp ? "Cancel" : "+ Add App"}
+          </button>
         </div>
+
+        {/* Add app inline form */}
+        {addingApp && (
+          <div className="mb-8 p-5 bg-white/5 border border-white/10 rounded-2xl">
+            <p className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-4">Register new app</p>
+            <div className="grid sm:grid-cols-4 gap-3">
+              <div>
+                <span className={label}>App ID (slug)</span>
+                <input className={input} placeholder="myapp" value={newAppId}
+                  onChange={(e) => setNewAppId(e.target.value.toLowerCase().replace(/\s+/g, "-"))} />
+              </div>
+              <div>
+                <span className={label}>Display name</span>
+                <input className={input} placeholder="My App" value={newAppName}
+                  onChange={(e) => setNewAppName(e.target.value)} />
+              </div>
+              <div>
+                <span className={label}>Code prefix</span>
+                <input className={input} placeholder="MA" maxLength={4} value={newAppPrefix}
+                  onChange={(e) => setNewAppPrefix(e.target.value.toUpperCase())} />
+              </div>
+              <div>
+                <span className={label}>FCM topic</span>
+                <input className={input} placeholder="myapp_all (auto)" value={newAppTopic}
+                  onChange={(e) => setNewAppTopic(e.target.value)} />
+              </div>
+            </div>
+            <button onClick={saveCustomApp}
+              disabled={!newAppId.trim() || !newAppName.trim() || !newAppPrefix.trim()}
+              className="mt-4 px-6 py-2.5 bg-red-600 hover:bg-red-500 disabled:opacity-30 font-bold rounded-xl text-sm transition-colors">
+              Add App
+            </button>
+            <p className="mt-2 text-xs text-gray-500">Saved in your browser — no code change needed. Also add the campaign slug on the backend for coupon redemption to work.</p>
+          </div>
+        )}
+
 
         <div className="grid lg:grid-cols-[380px_1fr] gap-8">
           {/* ── Create panel ─────────────────────────────────────────────── */}
