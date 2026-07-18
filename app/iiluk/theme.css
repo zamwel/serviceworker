@@ -1,0 +1,86 @@
+/* IILuk design tokens — warm darkroom palette, distinct from the other
+   Codeink apps' flat dark/glassmorphism template on purpose (see the
+   approved design-direction review). Light is the "paper" ground, dark is
+   the "studio" ground; both are first-class, not an inverted afterthought. */
+
+.iiluk {
+  --gold: #f5b800;
+  --gold-deep: #c98f00;
+  --gold-pale: #ffe7a8;
+  --teal: #2b6e68;
+  --teal-pale: #bfdad6;
+  --ink: #150f09;
+  --ink-soft: #47372a;
+
+  --bg: #f5f2ec;
+  --surface: #ffffff;
+  --surface-2: #faf7f0;
+  --hairline: rgba(21, 15, 9, 0.08);
+  --text: #150f09;
+  --text-soft: #6b5a48;
+  --text-faint: #a99a87;
+  --shadow: 0 1px 2px rgba(21, 15, 9, 0.06), 0 8px 24px -12px rgba(21, 15, 9, 0.12);
+
+  --serif: Georgia, 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', serif;
+  --sans: -apple-system, 'Segoe UI', Roboto, Inter, Helvetica, Arial, sans-serif;
+
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+}
+
+.dark .iiluk {
+  --bg: #0b0806;
+  --surface: #17110c;
+  --surface-2: #1d150e;
+  --hairline: rgba(245, 184, 0, 0.12);
+  --text: #f5f0e6;
+  --text-soft: #c9bba9;
+  --text-faint: #a99a87;
+  --shadow: 0 1px 0 rgba(255, 255, 255, 0.03) inset, 0 20px 40px -20px rgba(0, 0, 0, 0.6);
+}
+
+.iiluk-serif {
+  font-family: var(--serif);
+  font-weight: 400;
+}
+
+.iiluk-grain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.045;
+  z-index: 0;
+  background-image: repeating-radial-gradient(circle at 0 0, transparent 0, rgba(255, 255, 255, 0.6) 1px, transparent 2px);
+  background-size: 3px 3px;
+  mix-blend-mode: overlay;
+}
+
+.dark .iiluk-grain {
+  opacity: 0.06;
+}
+
+/* Continuous marquee strip (hero section) — track is the image drawn twice
+   back to back; animating exactly one copy-width leaves no visible seam. */
+.iiluk-marquee-track {
+  animation: iiluk-marquee 28s linear infinite;
+}
+
+.iiluk-marquee-track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes iiluk-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .iiluk-marquee-track {
+    animation: none;
+  }
+}
