@@ -187,3 +187,72 @@ export async function getDeviceGrant(
   }
   return grantResult(active[0]);
 }
+
+export type ClaimResult = PromoResult & { code?: string };
+
+// Self-serve codes are intentionally bounded — a short subscription window,
+// not a lifetime grant — so the in-app "Get Code" button can never be used
+// to replace the admin-distributed campaign coupons as a monetization path.
+const SELF_SERVE_PREFIX = "FREE";
+const SELF_SERVE_DURATION_DAYS = 1;
+const SELF_SERVE_NOTE = "self-serve claim (in-app Get Code)";
+
+/**
+ * Mints one free, device-bound code on demand — no admin action required.
+ * Idempotent per device: if this device already holds an active grant (from
+ * this endpoint or from any manually-redeemed campaign coupon), that same
+ * grant/code is returned instead of minting a new one, so repeat taps can
+ * never stack additional free time.
+ */
+export async function claimFreeCode(appId: string, deviceId: string): Promise<ClaimResult> {
+  if (!appId || !deviceId) {
+    return { success: false, message: "Missing required fields." };
+  }
+
+  const existing = await getDeviceGrant(appId, deviceId);
+  if (existing.success) {
+    const redemption = await prisma.promoRedemption.findFirst({
+      where: { appId, deviceId, revoked: false },
+      orderBy: { createdAt: "desc" },
+    });
+    return { ...existing, code: redemption?.code };
+  }
+
+  let code = generateCode(SELF_SERVE_PREFIX, 6);
+  for (let i = 0; i < 5; i++) {
+    const clash = await prisma.promoCoupon.findUnique({ where: { appId_code: { appId, code } } });
+    if (!clash) break;
+    code = generateCode(SELF_SERVE_PREFIX, 6);
+  }
+
+  const grantExpiresAt = new Date(Date.now() + SELF_SERVE_DURATION_DAYS * 86_400_000);
+
+  const redemption = await prisma.$transaction(async (tx) => {
+    const coupon = await tx.promoCoupon.create({
+      data: {
+        appId,
+        code,
+        rewardType: "subscription",
+        durationDays: SELF_SERVE_DURATION_DAYS,
+        maxRedemptions: 1,
+        redeemedCount: 1,
+        active: false, // single-use, already spent at creation
+        note: SELF_SERVE_NOTE,
+      },
+    });
+    return tx.promoRedemption.create({
+      data: {
+        appId,
+        couponId: coupon.id,
+        code: coupon.code,
+        deviceId,
+        rewardType: coupon.rewardType,
+        durationDays: coupon.durationDays,
+        creditAmount: coupon.creditAmount,
+        grantExpiresAt,
+      },
+    });
+  });
+
+  return { ...grantResult(redemption), code: redemption.code };
+}
