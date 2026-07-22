@@ -1,2 +1,7 @@
-google.com, pub-9043208558525567, DIRECT, f08c47fec0942fa0
+google.com, pub-1398945240983355, DIRECT, f08c47fec0942fa0
+
+****google.com, pub-9043208558525567, DIRECT, f08c47fec0942fa0****
 tappx.com, kf0e4ba24, DIRECT, 9f375a07da0318ec
+
+/*google.com, pub-9043208558525567, DIRECT, f08c47fec0942fa0*/
+/*tappx.com, kf0e4ba24, DIRECT, 9f375a07da0318ec*/
