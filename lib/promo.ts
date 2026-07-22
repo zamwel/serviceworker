@@ -92,8 +92,19 @@ export async function redeemCoupon(
     where: { appId_code: { appId, code } },
   });
 
-  if (!coupon || !coupon.active) {
+  if (!coupon) {
     return { success: false, message: "This code is not valid.", errorCode: "INVALID_CODE" };
+  }
+  // A coupon auto-deactivates once its redemption slots are used up (see the
+  // update below), so `active:false` almost always means "already redeemed"
+  // rather than "doesn't exist" — collapsing the two into one generic
+  // "not valid" message hid that distinction from users.
+  if (!coupon.active) {
+    return {
+      success: false,
+      message: "This code has already been redeemed.",
+      errorCode: "ALREADY_REDEEMED",
+    };
   }
   if (coupon.expiresAt && coupon.expiresAt.getTime() < Date.now()) {
     return { success: false, message: "This code has expired.", errorCode: "EXPIRED" };
