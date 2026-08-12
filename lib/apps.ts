@@ -47,6 +47,7 @@ export const APPS: AppEntry[] = [
   { id: "subswatcher", name: "SubsWatcher", prefix: "SW", fcmTopic: "subswatcher_all" },
   { id: "inmeasure",   name: "InMeasure",   prefix: "IM", fcmTopic: "inmeasure_all"   },
   { id: "indocedit",   name: "IndocEdit",   prefix: "IE", fcmTopic: "indocedit_all"   },
+  { id: "iiluk",       name: "IILuk",       prefix: "IL", fcmTopic: "all_iiluk"       },
 ];
 
 export const DEFAULT_APP = APPS[0];
