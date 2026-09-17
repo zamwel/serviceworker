@@ -1,0 +1,64 @@
+﻿/* Bet of the Day (BTD) design tokens.
+   Electric sports orange primary with deep carbon/slate dark mode and clean, elevated light mode.
+   Clean, modern, borderless card aesthetic with subtle glow shadows. */
+
+.btd {
+  --accent: #ea580c;
+  --accent-hover: #c2410c;
+  --accent-subtle: #ffedd5;
+  --accent-on: #ffffff;
+  --accent-glow: rgba(234, 88, 12, 0.25);
+
+  --bg: #ffffff;
+  --surface: #f8fafc;
+  --surface-2: #f1f5f9;
+  --surface-elevated: #ffffff;
+  --hairline: rgba(15, 23, 42, 0.08);
+  --text: #0f172a;
+  --text-soft: #475569;
+  --text-faint: #94a3b8;
+
+  --badge-win: #10b981;
+  --badge-win-bg: rgba(16, 185, 129, 0.12);
+
+  --sans: var(--font-inter), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  min-height: 100vh;
+}
+
+.dark .btd {
+  --accent: #f97316;
+  --accent-hover: #ea580c;
+  --accent-subtle: #431407;
+  --accent-on: #ffffff;
+  --accent-glow: rgba(249, 115, 22, 0.35);
+
+  --bg: #070a0f;
+  --surface: #0e1420;
+  --surface-2: #161f30;
+  --surface-elevated: #1a2438;
+  --hairline: rgba(255, 255, 255, 0.08);
+  --text: #f8fafc;
+  --text-soft: #94a3b8;
+  --text-faint: #64748b;
+
+  --badge-win: #34d399;
+  --badge-win-bg: rgba(52, 211, 153, 0.16);
+}
+
+.btd :is(h1, h2, h3, h4) {
+  letter-spacing: -0.025em;
+  font-weight: 800;
+}
+
+.btd-card-hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btd-card-hover:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 32px -8px var(--accent-glow);
+}

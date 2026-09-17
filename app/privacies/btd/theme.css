@@ -1,0 +1,42 @@
+﻿/* BTD legal-suite design tokens – electric orange accent on neutral ground.
+   Mirrors the Flutter app's dynamic accent system. */
+
+.btd-legal {
+  --accent: #f97316;
+  --accent-pressed: #fb923c;
+  --accent-subtle: #fff7ed;
+  --accent-on: #ffffff;
+
+  --bg: #ffffff;
+  --surface: #f5f5f5;
+  --surface-2: #ececec;
+  --hairline: rgba(10, 10, 10, 0.1);
+  --text: #0a0a0a;
+  --text-soft: #52525b;
+  --text-faint: #8a8a93;
+
+  --sans: var(--font-barlow), -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+}
+
+.dark .btd-legal {
+  --accent: #fb923c;
+  --accent-pressed: #fdba74;
+  --accent-subtle: #431407;
+  --accent-on: #1c0a00;
+
+  --bg: #0a0a0a;
+  --surface: #141414;
+  --surface-2: #1c1c1c;
+  --hairline: rgba(255, 255, 255, 0.1);
+  --text: #f5f5f5;
+  --text-soft: #a3a3ab;
+  --text-faint: #6b6b73;
+}
+
+.btd-legal :is(h1, h2, h3) {
+  letter-spacing: -0.01em;
+}
