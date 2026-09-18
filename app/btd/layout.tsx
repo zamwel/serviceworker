@@ -1,4 +1,4 @@
-﻿import type { Metadata } from 'next';
+import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { BRAND } from './data';
 import { THEME_INIT_SCRIPT } from './shared';
@@ -13,8 +13,8 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL(BRAND.origin),
   title: {
-    default: ${BRAND.name} | ,
-    template: %s · ,
+    default: `${BRAND.name} | ${BRAND.tagline}`,
+    template: `%s · ${BRAND.name}`,
   },
   description: BRAND.oneLiner,
   applicationName: BRAND.name,
@@ -39,13 +39,13 @@ export const metadata: Metadata = {
     type: 'website',
     url: BRAND.siteUrl,
     siteName: BRAND.name,
-    title: ${BRAND.name} | ,
+    title: `${BRAND.name} | ${BRAND.tagline}`,
     description: BRAND.oneLiner,
     locale: 'en_US',
   },
   twitter: {
     card: 'summary_large_image',
-    title: ${BRAND.name} | ,
+    title: `${BRAND.name} | ${BRAND.tagline}`,
     description: BRAND.oneLiner,
   },
   robots: {
@@ -87,9 +87,9 @@ const jsonLd = {
 
 export default function BtdLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <div className={td relative }>
+    <div className={`btd relative ${inter.variable}`}>
       <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
-      <script type=application/ld+json dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       {children}
     </div>
   );

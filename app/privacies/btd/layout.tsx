@@ -1,4 +1,4 @@
-﻿import type { Metadata } from 'next';
+import type { Metadata } from 'next';
 import { Barlow } from 'next/font/google';
 import { APP } from './data';
 import { THEME_INIT_SCRIPT } from './shared';
@@ -12,8 +12,8 @@ const barlow = Barlow({
 
 export const metadata: Metadata = {
   title: {
-    default: ${APP.name} | Legal,
-    template: %s · ,
+    default: `${APP.name} | Legal`,
+    template: `%s · ${APP.name}`,
   },
   description: APP.oneLiner,
   applicationName: APP.name,
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     type: 'website',
     url: APP.basePath,
     siteName: APP.name,
-    title: ${APP.name} | Legal,
+    title: `${APP.name} | Legal`,
     description: APP.oneLiner,
     locale: 'en_US',
   },
@@ -63,11 +63,11 @@ const jsonLd = {
 
 export default function BtdLegalLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <div className={td-legal relative }>
+    <div className={`btd-legal relative ${barlow.variable}`}>
       {/* Runs before paint so the light/dark toggle never flashes the wrong theme. */}
       <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
       <script
-        type=application/ld+json
+        type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       {children}

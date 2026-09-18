@@ -1,4 +1,4 @@
-﻿// Central content for the Bet of the Day (BTD) marketing site.
+// Central content for the Bet of the Day (BTD) marketing site.
 // Single source of truth so landing, features, about, support, and legal stay in sync.
 
 export const BRAND = {
@@ -172,7 +172,7 @@ export type Plan = {
 export const PLANS: Plan[] = [
   {
     name: 'Free Discovery',
-    price: '',
+    price: '$0',
     cadence: 'free forever',
     features: [
       '2 free expert match unlocks every matchday',
@@ -184,7 +184,7 @@ export const PLANS: Plan[] = [
   },
   {
     name: 'VIP Annual',
-    price: '.99',
+    price: '$29.99',
     cadence: 'billed annually (save 50%)',
     highlight: true,
     badge: 'Most Popular',
@@ -199,7 +199,7 @@ export const PLANS: Plan[] = [
   },
   {
     name: 'VIP Monthly',
-    price: '.99',
+    price: '$4.99',
     cadence: 'billed monthly · cancel anytime',
     features: [
       'Unlimited match unlocks for 30 days',
@@ -211,7 +211,7 @@ export const PLANS: Plan[] = [
   },
   {
     name: 'VIP Lifetime',
-    price: '.99',
+    price: '$59.99',
     cadence: 'one-time payment · forever access',
     badge: 'Best Value',
     features: [
@@ -254,31 +254,31 @@ export const FAQS: Faq[] = [
 ];
 
 export const NAV_LINKS = [
-  { label: 'Features', href: ${BRAND.basePath}/features },
+  { label: 'Features', href: `${BRAND.basePath}/features` },
   { label: 'How It Works', href: '#how' },
   { label: 'Pricing', href: '#pricing' },
-  { label: 'Support', href: ${BRAND.basePath}/support },
+  { label: 'Support', href: `${BRAND.basePath}/support` },
 ] as const;
 
 export const FOOTER_LINKS = {
   product: [
-    { label: 'Features', href: ${BRAND.basePath}/features },
-    { label: 'How It Works', href: ${BRAND.basePath}#how },
-    { label: 'Pricing Plans', href: ${BRAND.basePath}#pricing },
-    { label: 'Download App', href: ${BRAND.basePath}/download },
-    { label: 'Offers & Promos', href: ${BRAND.basePath}/offers },
+    { label: 'Features', href: `${BRAND.basePath}/features` },
+    { label: 'How It Works', href: `${BRAND.basePath}#how` },
+    { label: 'Pricing Plans', href: `${BRAND.basePath}#pricing` },
+    { label: 'Download App', href: `${BRAND.basePath}/download` },
+    { label: 'Offers & Promos', href: `${BRAND.basePath}/offers` },
   ],
   company: [
-    { label: 'About BTD', href: ${BRAND.basePath}/about },
-    { label: 'Contact Us', href: ${BRAND.basePath}/contact },
-    { label: 'Support Center', href: ${BRAND.basePath}/support },
+    { label: 'About BTD', href: `${BRAND.basePath}/about` },
+    { label: 'Contact Us', href: `${BRAND.basePath}/contact` },
+    { label: 'Support Center', href: `${BRAND.basePath}/support` },
   ],
   legal: [
     { label: 'Privacy Policy', href: BRAND.legalBasePath },
-    { label: 'Terms of Service', href: ${BRAND.legalBasePath}/tos },
-    { label: 'EULA', href: ${BRAND.legalBasePath}/eula },
-    { label: 'Cookie Policy', href: ${BRAND.legalBasePath}/cookies },
-    { label: 'Refund Policy', href: ${BRAND.legalBasePath}/refund },
+    { label: 'Terms of Service', href: `${BRAND.legalBasePath}/tos` },
+    { label: 'EULA', href: `${BRAND.legalBasePath}/eula` },
+    { label: 'Cookie Policy', href: `${BRAND.legalBasePath}/cookies` },
+    { label: 'Refund Policy', href: `${BRAND.legalBasePath}/refund` },
   ],
 };
 
