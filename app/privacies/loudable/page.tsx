@@ -14,9 +14,11 @@ const CONTRACT: Row[] = [
   { data: 'Document file bytes', leaves: 'Never', notes: 'Not for parsing, OCR, narration, translation or summaries' },
   { data: 'Extracted text', leaves: 'Never', notes: 'Stored in a local database on your device only' },
   { data: 'Generated audio', leaves: 'Never', notes: 'Local files under the app’s own storage' },
+  { data: 'Backups and exports', leaves: 'Only when you choose a destination', notes: 'May contain your local database, downloaded models, source files and generated audio' },
   { data: 'Bookmarks, notes, highlights, positions', leaves: 'Never', notes: 'Local database only' },
   { data: 'Voice / pronunciation dictionary', leaves: 'Never', notes: 'Local database only' },
   { data: 'Listening history & stats', leaves: 'Never', notes: 'Local database only' },
+  { data: 'Ad points and reward history', leaves: 'Never', notes: 'Stored locally to manage rewarded-ad eligibility and usage' },
   { data: 'Anonymous device ID', leaves: 'Yes', notes: 'Coupon redemption only' },
   { data: 'RevenueCat customer ID + purchase state', leaves: 'Yes', notes: 'Billing only' },
   { data: 'AdMob ad requests', leaves: 'Yes', notes: 'Only on the specific ad surfaces below, with consent gathered first' },
@@ -27,7 +29,7 @@ const CONTRACT: Row[] = [
 
 const SERVICES = [
   { title: 'On-device AI models', desc: 'Document parsing, OCR, layout understanding, narration, translation and summarisation all run locally on your phone. No document content is ever sent anywhere for processing.' },
-  { title: 'Google AdMob', desc: 'Serves the rewarded ads you can optionally choose to watch. Pro subscribers never see an ad.' },
+  { title: 'Google AdMob', desc: 'Serves rewarded ads you choose to watch. Depending on your consent choices, Google may process advertising identifiers and device signals to deliver or measure an ad. Document content is never included.' },
   { title: 'RevenueCat & Google Play Billing', desc: 'Verifies and restores your Pro subscription or lifetime purchase. We never see your card details.' },
   { title: 'Firebase Cloud Messaging', desc: 'Delivers optional push notifications, which you can disable at any time in system settings.' },
   { title: 'Codeink catalog & campaign services', desc: 'Power the optional Discover catalog and promo/coupon features. Used only when you actively browse Discover or redeem a code.' },
@@ -116,15 +118,25 @@ export default function PrivacyPolicyPage() {
 
           <Section n="05" title="Advertising">
             <p>
-              The free tier of {APP.name} can optionally show a small number of rewarded ads — for example, to
-              unlock 12 hours of Pro features. Ads only ever appear on two specific screens: the onboarding
-              value-preview step, and the escape-hatch option on the paywall. Ads never interrupt playback, an
-              in-progress conversion, or document import, and Pro subscribers never see an ad at all. Where
-              required, consent for ad personalisation is gathered before any ad request is made.
+              The free tier can show rewarded ads at clear opt-in points, such as before an import, after a chapter
+              conversion, from the paywall, or during a long listening session. A rewarded ad must finish
+              successfully before points are granted; a skipped or failed ad grants nothing. The app spaces these
+              opportunities so ads are not continuously shown, and playback resumes after a deliberately paused
+              ad has closed. Pro subscribers do not see rewarded ads. Where required, consent for ad
+              personalisation is gathered before any ad request is made.
             </p>
           </Section>
 
-          <Section n="06" title="Your choices">
+          <Section n="06" title="Storage, backups and deletion">
+            <p>
+              Loudable stores imported documents, extracted text, transcripts, summaries, downloaded models and
+              generated audio in app-managed local storage. A backup is not automatic cloud sync: it is an archive
+              created only when you start it and saved to the destination you select. Because a backup can contain
+              the same material as your library, protect and delete exported backup files as you would the originals.
+            </p>
+          </Section>
+
+          <Section n="07" title="Your choices">
             <ul className="space-y-3 list-none">
               {CHOICES.map((c) => (
                 <li key={c} className="flex items-start gap-3">
@@ -135,18 +147,21 @@ export default function PrivacyPolicyPage() {
             </ul>
           </Section>
 
-          <Section n="07" title="Children’s privacy">
+          <Section n="08" title="Permissions and children’s privacy">
             <p>
-              {APP.name} is a productivity tool aimed at professionals and students and is not directed at
-              children under 13. We do not knowingly collect personal information from children.
+              Camera, notification and file-access permissions are requested only when their related feature is
+              used. You can deny or revoke them in Android settings. {APP.name} is a productivity tool aimed at
+              professionals and students and is not directed at children under 13. We do not knowingly collect
+              personal information from children.
             </p>
           </Section>
 
-          <Section n="08" title="Changes to this policy">
+          <Section n="09" title="Security and changes">
             <p>
-              If this policy changes in a way that affects what data leaves your device, we’ll update the
-              &ldquo;Last updated&rdquo; date above and, for material changes, surface a notice inside the app
-              before the change takes effect.
+              Local files are protected by the operating system’s app storage controls, but no device storage is
+              risk-free. Use a device lock and keep exported backups protected. If this policy changes in a way
+              that affects what data leaves your device, we’ll update the “Last updated” date above and, for
+              material changes, surface a notice inside the app before the change takes effect.
             </p>
           </Section>
 

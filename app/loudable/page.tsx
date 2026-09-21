@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { Lock, Wifi, ShieldCheck, Check, ChevronDown } from 'lucide-react';
+import Image from 'next/image';
+import { Lock, Wifi, ShieldCheck, Check, ChevronDown, Smartphone, FileAudio, Languages, Sparkles } from 'lucide-react';
 import { Header, Footer, Eyebrow, WaveformHero, DownloadCta, FEATURE_ICONS } from './shared';
 import { BRAND, FEATURE_GROUPS, TRUST_POINTS, STEPS, PLANS, FAQS } from './data';
 
@@ -44,7 +45,30 @@ export default function LoudableLanding() {
                 <span className="flex items-center gap-2"><ShieldCheck className="w-3.5 h-3.5" style={{ color: 'var(--accent)' }} /> Verifiable, not just promised</span>
               </div>
             </div>
-            <WaveformHero />
+            <div className="space-y-5">
+              <div className="relative overflow-hidden rounded-[28px] aspect-[16/10]" style={{ background: 'var(--surface)' }}>
+                <Image src="/loudable/ludablebanner.png" alt="Loudable document-to-audiobook experience" fill className="object-cover" priority />
+              </div>
+              <WaveformHero />
+            </div>
+          </div>
+        </section>
+
+        {/* PRODUCT PROOF */}
+        <section className="max-w-6xl mx-auto px-6 py-16">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {[
+              { icon: Smartphone, title: 'Built for your phone', text: 'A focused mobile workflow for reading, converting and listening anywhere.' },
+              { icon: FileAudio, title: 'Real audiobook output', text: 'Chapters, position memory, background playback and export-ready audio.' },
+              { icon: Languages, title: 'Understand more', text: 'OCR, translation, summaries and pronunciation controls stay close to your library.' },
+              { icon: Sparkles, title: 'Made for focus', text: 'A calm interface that turns long documents into a listening habit.' },
+            ].map(({ icon: Icon, title, text }) => (
+              <div key={title} className="rounded-2xl p-6" style={{ background: 'var(--surface)' }}>
+                <Icon className="w-5 h-5 mb-5" style={{ color: 'var(--accent)' }} />
+                <h3 className="font-bold mb-2" style={{ color: 'var(--text)' }}>{title}</h3>
+                <p className="text-sm leading-relaxed" style={{ color: 'var(--text-soft)' }}>{text}</p>
+              </div>
+            ))}
           </div>
         </section>
 
@@ -104,6 +128,31 @@ export default function LoudableLanding() {
                 <span className="text-2xl font-bold" style={{ color: 'var(--accent)' }}>{s.num}</span>
                 <h3 className="text-base font-bold mt-3 mb-2" style={{ color: 'var(--text)' }}>{s.title}</h3>
                 <p className="text-sm leading-relaxed" style={{ color: 'var(--text-soft)' }}>{s.desc}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* APP GALLERY */}
+        <section className="max-w-6xl mx-auto px-6 py-20">
+          <div className="mb-12 max-w-xl">
+            <Eyebrow>Inside Loudable</Eyebrow>
+            <h2 className="text-3xl lg:text-4xl font-bold mb-4" style={{ color: 'var(--text)' }}>See the reading experience.</h2>
+            <p style={{ color: 'var(--text-soft)' }}>Explore the home library, discovery tools, player, enhancements and the visual language of the app.</p>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {[
+              ['ChatGPT Image Sep 17, 2026, 01_01_32 PM.png', 'Loudable brand visual'],
+              ['palmapp_homescreen.png', 'Home library'],
+              ['palmapp_discoverscreen.png', 'Discover'],
+              ['palmpapp_playerscreen.png', 'Audiobook player'],
+              ['playerscreen.png', 'Playback controls'],
+              ['playerscreenwithenhancement.png', 'Enhanced reading'],
+              ['lifetime.png', 'Lifetime plan'],
+              ['palmapp_ludablebanner.png', 'Loudable banner'],
+            ].map(([src, alt]) => (
+              <div key={src} className="relative overflow-hidden rounded-2xl aspect-[4/5]" style={{ background: 'var(--surface)' }}>
+                <Image src={`/loudable/${src}`} alt={alt} fill className="object-cover" />
               </div>
             ))}
           </div>

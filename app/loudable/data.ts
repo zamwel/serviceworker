@@ -10,13 +10,18 @@ export const BRAND = {
   positioning: 'The private audiobook studio in your pocket',
   packageId: 'com.stsl.codeink.loudable',
   company: 'Codeink Technologies',
-  supportEmail: 'support@loudable.app',
+  supportEmail: 'deverloper.codeink.playconsole@gmail.com',
   siteUrl: 'https://serviceworker-two.vercel.app/loudable',
   origin: 'https://serviceworker-two.vercel.app',
   basePath: '/loudable',
   legalBasePath: '/privacies/loudable',
   // Not live yet — see LOUDABLE_APP_BLUEPRINT.md Section 0.11 open items.
-  playStoreUrl: '',
+  playStoreUrl: 'https://play.google.com/store/apps/details?id=com.stsl.codeink.loudable',
+  socials: [
+    { label: 'WhatsApp', href: 'https://whatsapp.com/channel/0029Vb800IvHFxOsFE5DTb2Z' },
+    { label: 'Telegram', href: 'https://t.me/codeinkapps' },
+    { label: 'Discord', href: 'https://discord.gg/TtPtQ2UbJ' },
+  ],
 } as const;
 
 export type Feature = { id: string; title: string; desc: string; tier: 'free' | 'pro'; icon: string };

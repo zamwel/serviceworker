@@ -9,9 +9,9 @@ export const APP = {
   oneLiner: 'Turn any document into a studio-quality audiobook — entirely on your device.',
   packageId: 'com.stsl.codeink.loudable',
   basePath: '/privacies/loudable',
-  email: 'support@loudable.app',
+  email: 'deverloper.codeink.playconsole@gmail.com',
   company: 'Codeink Technologies',
-  lastUpdated: 'August 13, 2026',
+  lastUpdated: 'September 21, 2026',
 } as const;
 
 export type TabId = 'privacy' | 'tos' | 'eula' | 'cookies' | 'refund';

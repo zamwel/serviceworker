@@ -33,6 +33,11 @@ export const metadata: Metadata = {
     'read documents aloud',
     'OCR audiobook',
     'AI voice reader',
+    'private audiobook maker',
+    'offline document reader',
+    'PDF audiobook converter',
+    'text to speech offline',
+    'document narration app',
   ],
   alternates: { canonical: BRAND.basePath },
   openGraph: {
@@ -42,6 +47,7 @@ export const metadata: Metadata = {
     title: `${BRAND.name} | ${BRAND.tagline}`,
     description: BRAND.oneLiner,
     locale: 'en_US',
+    images: [{ url: '/loudable/ludablebanner.png', alt: 'Loudable document-to-audiobook app' }],
   },
   twitter: {
     card: 'summary_large_image',

@@ -76,17 +76,17 @@ export function BrandLogo() {
   );
 }
 
-/** The real download link isn't live yet (Section 0.11 open items) — this is
- *  an honest "coming soon" state, not a link to nowhere. */
 export function DownloadCta({ large = false }: { large?: boolean }) {
   return (
-    <span
+    <a
+      href={BRAND.playStoreUrl}
+      target="_blank"
+      rel="noopener noreferrer"
       className={`inline-flex items-center gap-2.5 font-bold rounded-xl ${large ? 'px-7 py-4 text-base' : 'px-5 py-3 text-sm'}`}
-      style={{ background: 'var(--surface)', color: 'var(--text-faint)' }}
-      title="Not yet published — see Settings > About once it ships"
+      style={{ background: 'var(--surface)', color: 'var(--text)' }}
     >
-      Coming soon to Google Play
-    </span>
+      Get Loudable on Google Play
+    </a>
   );
 }
 
@@ -159,6 +159,13 @@ export function Footer() {
           <a href={`mailto:${BRAND.supportEmail}`} className="inline-flex items-center gap-2 text-sm mt-4" style={{ color: 'var(--text-soft)' }}>
             <Mail className="w-3.5 h-3.5" /> {BRAND.supportEmail}
           </a>
+          <div className="flex flex-wrap gap-3 mt-5 text-xs" style={{ color: 'var(--text-soft)' }}>
+            {BRAND.socials.map((social) => (
+              <a key={social.label} href={social.href} target="_blank" rel="noopener noreferrer" className="hover:underline">
+                {social.label}
+              </a>
+            ))}
+          </div>
         </div>
         {([['Product', FOOTER_LINKS.product], ['Company', FOOTER_LINKS.company], ['Legal', FOOTER_LINKS.legal]] as const).map(([title, links]) => (
           <div key={title}>
