@@ -11,6 +11,25 @@ export const metadata: Metadata = {
 
 const lastUpdated = "September 24, 2026";
 
+function Section({
+  n,
+  title,
+  children,
+}: {
+  n: string;
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <section>
+      <h2 className="text-3xl font-bold mb-8 text-white border-l-4 border-red-600 pl-6 flex items-baseline gap-3">
+        <span className="text-red-500 text-lg font-mono">{n}</span> {title}
+      </h2>
+      <div className="space-y-4">{children}</div>
+    </section>
+  );
+}
+
 export default function EULA() {
   return (
     <div className="min-h-screen bg-[#0A0A0A] text-white font-sans selection:bg-red-600/30">
@@ -46,46 +65,103 @@ export default function EULA() {
               License Grant
             </h2>
             <p className="mb-4">
-              <strong>{BRAND.name}</strong> grants you a revocable, non-exclusive,
-              non-transferable, limited license to download, install and use the
-              Application strictly in accordance with the terms of this Agreement.
+              Subject to your compliance with this Agreement, {BRAND.company} grants you a
+              personal, revocable, non-exclusive, non-transferable, limited license to
+              download, install and run one copy of the {BRAND.name} application (package{" "}
+              <code className="text-gray-400">{BRAND.packageId}</code>) on Android devices
+              you own or control, for your own personal, non-commercial use.
             </p>
           </section>
 
-          <section>
-            <h2 className="text-3xl font-bold mb-8 text-white border-l-4 border-red-600 pl-6">
-              Restrictions
-            </h2>
+          <Section n="02" title="What the License Covers">
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="bg-white/5 p-6 rounded-2xl border border-white/5">
+                <h3 className="text-lg font-semibold mb-3 text-red-400">Free tier</h3>
+                <p className="text-sm">
+                  Unlimited browsing, search, favorites and downloads. Downloaded and
+                  set wallpapers carry a small {BRAND.name} watermark, and the
+                  experience is supported by interstitial/rewarded ads.
+                </p>
+              </div>
+              <div className="bg-white/5 p-6 rounded-2xl border border-white/5">
+                <h3 className="text-lg font-semibold mb-3 text-red-400">Pro tier</h3>
+                <p className="text-sm">
+                  An additional, revocable license extension - purchased monthly,
+                  yearly or as a one-time lifetime unlock via Google Play Billing -
+                  that removes ads and the watermark and lifts download limits for as
+                  long as the entitlement remains active (or permanently, for
+                  lifetime).
+                </p>
+              </div>
+            </div>
+          </Section>
+
+          <Section n="03" title="Restrictions">
             <div className="grid md:grid-cols-2 gap-6">
               <div className="bg-white/5 p-6 rounded-2xl border border-white/5">
                 <h3 className="text-lg font-semibold mb-3 text-red-400">No Redistribution</h3>
-                <p className="text-sm">You agree not to license, sell, rent, lease, assign, distribute, host, outsource, disclose or otherwise commercially exploit the Application or the artwork it displays.</p>
+                <p className="text-sm">You agree not to license, sell, rent, lease, assign, distribute, host, outsource, disclose or otherwise commercially exploit the Application or the artwork it displays or lets you download.</p>
               </div>
               <div className="bg-white/5 p-6 rounded-2xl border border-white/5">
                 <h3 className="text-lg font-semibold mb-3 text-red-400">Reverse Engineering</h3>
-                <p className="text-sm">You may not decompile, reverse engineer, disassemble, attempt to derive the source code of, or decrypt the Application.</p>
+                <p className="text-sm">You may not decompile, reverse engineer, disassemble, attempt to derive the source code of, or decrypt the Application, or bypass any entitlement, watermark or ad-serving logic it implements.</p>
+              </div>
+              <div className="bg-white/5 p-6 rounded-2xl border border-white/5">
+                <h3 className="text-lg font-semibold mb-3 text-red-400">No Automated Access</h3>
+                <p className="text-sm">You may not use bots, scrapers or other automated means to access the Application or the TMDB data it relies on beyond normal, interactive personal use.</p>
+              </div>
+              <div className="bg-white/5 p-6 rounded-2xl border border-white/5">
+                <h3 className="text-lg font-semibold mb-3 text-red-400">Third-Party Content Stays Third-Party</h3>
+                <p className="text-sm">Nothing in this license transfers ownership of any movie/TV artwork, title or metadata to you; it remains the property of its respective studio or rights holder, made available through the TMDB API.</p>
               </div>
             </div>
-          </section>
+          </Section>
+
+          <Section n="04" title="Updates">
+            <p>
+              We may release updates to {BRAND.name} that add features, fix bugs, or
+              change how existing features work, including the ad frequency, cache
+              behavior or Pro entitlement checks described elsewhere in our legal pages.
+              Continuing to use the app after an update constitutes acceptance of the
+              app as updated.
+            </p>
+          </Section>
 
           <section className="bg-gradient-to-br from-red-600/10 to-transparent p-10 rounded-[40px] border border-red-500/10">
             <h2 className="text-2xl font-bold mb-6 text-white">Disclaimer of Warranties</h2>
             <p className="text-sm italic">
               THE APPLICATION IS PROVIDED TO YOU &quot;AS IS&quot; AND &quot;AS
-              AVAILABLE&quot; AND WITH ALL FAULTS AND DEFECTS WITHOUT WARRANTY OF ANY KIND.
+              AVAILABLE&quot; AND WITH ALL FAULTS AND DEFECTS WITHOUT WARRANTY OF ANY
+              KIND, INCLUDING RELIANCE ON THIRD-PARTY DATA (TMDB) THAT WE DO NOT
+              CONTROL.
             </p>
           </section>
 
-          <section>
-            <h2 className="text-3xl font-bold mb-8 text-white border-l-4 border-red-600 pl-6">
-              Limitation of Liability
-            </h2>
-            <p className="mb-6">
+          <Section n="05" title="Limitation of Liability">
+            <p>
               To the maximum extent permitted by applicable law, in no event shall{" "}
-              {BRAND.name} or its suppliers be liable for any special, incidental,
-              indirect, or consequential damages whatsoever.
+              {BRAND.name}, {BRAND.company} or its suppliers be liable for any special,
+              incidental, indirect, or consequential damages whatsoever arising out of
+              or in connection with your use of, or inability to use, the Application.
             </p>
-          </section>
+          </Section>
+
+          <Section n="06" title="Termination">
+            <p>
+              This license is effective until terminated. It terminates automatically,
+              without notice, if you fail to comply with any of its terms. Upon
+              termination you must cease all use of the Application and uninstall it
+              from all devices.
+            </p>
+          </Section>
+
+          <Section n="07" title="Governing Law">
+            <p>
+              This Agreement is governed by the laws applicable to {BRAND.company},
+              without regard to conflict-of-law principles, except where local
+              consumer-protection law mandatorily provides otherwise.
+            </p>
+          </Section>
 
           <section className="border-t border-white/10 pt-16 mt-16 text-center">
             <h2 className="text-3xl font-bold mb-6 text-white">Contact Us</h2>

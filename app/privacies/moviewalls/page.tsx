@@ -1,12 +1,9 @@
 import {
   Star,
   Download,
-  Search,
-  SlidersHorizontal,
   Check,
   ArrowRight,
   Quote,
-  Heart,
   Image as ImageIcon,
   Layers,
 } from "lucide-react";
@@ -23,6 +20,7 @@ import {
   FAQS,
   FOOTER_LINKS,
   PERKS_QUICK,
+  SCREENSHOTS,
 } from "./_components/data";
 
 /* FAQ structured data for the landing page (rich result eligibility). */
@@ -57,61 +55,50 @@ function PlayButton({ large = false }: { large?: boolean }) {
   );
 }
 
-function PhoneMockup({ className = "" }: { className?: string }) {
+function PhoneMockup({
+  screenshot,
+  className = "",
+  priority = false,
+}: {
+  screenshot: { src: string; alt: string };
+  className?: string;
+  priority?: boolean;
+}) {
   return (
     <div className={`relative ${className}`}>
       <div className="relative w-[260px] h-[540px] rounded-[44px] bg-gradient-to-b from-zinc-800 to-zinc-900 p-3 shadow-[0_30px_80px_-20px_rgba(220,38,38,0.45)] ring-1 ring-white/10">
         <div className="relative w-full h-full rounded-[34px] overflow-hidden bg-[#0A0A0A]">
-          {/* notch */}
-          <div className="absolute top-2 left-1/2 -translate-x-1/2 w-20 h-5 bg-black rounded-full z-20" />
-          {/* hero poster */}
-          <div className="relative h-2/5 bg-gradient-to-br from-red-700 via-red-900 to-[#0A0A0A]">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.15),transparent_60%)]" />
-            <div className="absolute top-4 left-4 px-2.5 py-1 bg-red-600 rounded-md text-[8px] font-bold tracking-wide">
-              TRENDING
-            </div>
-            <div className="absolute bottom-4 left-4 right-4">
-              <div className="h-2.5 w-28 bg-white/80 rounded-full mb-2" />
-              <div className="flex items-center gap-1">
-                <Star className="w-2.5 h-2.5 text-yellow-400 fill-yellow-400" />
-                <div className="h-2 w-8 bg-white/40 rounded-full" />
-              </div>
-            </div>
-          </div>
-          {/* poster grid */}
-          <div className="p-3 space-y-2.5">
-            <div className="h-2 w-20 bg-white/40 rounded-full" />
-            <div className="grid grid-cols-3 gap-2">
-              {[0, 1, 2, 3, 4, 5].map((i) => (
-                <div
-                  key={i}
-                  className="aspect-[2/3] rounded-md bg-gradient-to-br from-white/15 to-white/5 relative overflow-hidden"
-                >
-                  {i === 1 && (
-                    <div className="absolute top-1 right-1 w-3 h-3 rounded-full bg-red-600/90 grid place-items-center">
-                      <Heart className="w-1.5 h-1.5 text-white fill-white" />
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-          {/* bottom bar */}
-          <div className="absolute bottom-0 inset-x-0 h-12 bg-black/60 backdrop-blur border-t border-white/10 flex items-center justify-around">
-            <div className="w-5 h-5 rounded-md bg-white/30" />
-            <div className="grid place-items-center w-5 h-5">
-              <Search className="w-4 h-4 text-white/40" />
-            </div>
-            <div className="grid place-items-center w-9 h-9 -mt-4 rounded-full bg-red-600 shadow-lg">
-              <Heart className="w-4 h-4 text-white fill-white" />
-            </div>
-            <div className="grid place-items-center w-5 h-5">
-              <Download className="w-4 h-4 text-white/40" />
-            </div>
-            <div className="w-5 h-5 rounded-md bg-white/20" />
-          </div>
+          <NextImage
+            src={screenshot.src}
+            alt={screenshot.alt}
+            fill
+            sizes="260px"
+            className="object-cover"
+            priority={priority}
+          />
         </div>
       </div>
+    </div>
+  );
+}
+
+function ScreenCard({
+  screenshot,
+  label,
+  className = "",
+}: {
+  screenshot: { src: string; alt: string };
+  label: string;
+  className?: string;
+}) {
+  return (
+    <div className={`text-center ${className}`}>
+      <div className="relative w-[180px] h-[374px] mx-auto rounded-[32px] bg-gradient-to-b from-zinc-800 to-zinc-900 p-2.5 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.6)] ring-1 ring-white/10">
+        <div className="relative w-full h-full rounded-[24px] overflow-hidden bg-[#0A0A0A]">
+          <NextImage src={screenshot.src} alt={screenshot.alt} fill sizes="180px" className="object-cover" />
+        </div>
+      </div>
+      <p className="mt-4 text-sm font-semibold text-gray-300">{label}</p>
     </div>
   );
 }
@@ -193,7 +180,11 @@ export default function MovieWallsLanding() {
               </div>
             </div>
             <div className="flex justify-center lg:justify-end">
-              <PhoneMockup className="animate-in fade-in zoom-in-95 duration-1000" />
+              <PhoneMockup
+                screenshot={SCREENSHOTS.home}
+                priority
+                className="animate-in fade-in zoom-in-95 duration-1000"
+              />
             </div>
           </div>
         </section>
@@ -283,9 +274,18 @@ export default function MovieWallsLanding() {
             </p>
           </div>
           <div className="flex flex-wrap items-end justify-center gap-8">
-            <PhoneMockup className="scale-90 opacity-80 hidden sm:block" />
-            <PhoneMockup className="scale-110 z-10" />
-            <PhoneMockup className="scale-90 opacity-80 hidden sm:block" />
+            <PhoneMockup screenshot={SCREENSHOTS.postersGrid} className="scale-90 opacity-80 hidden sm:block" />
+            <PhoneMockup screenshot={SCREENSHOTS.backdropDetail} className="scale-110 z-10" />
+            <PhoneMockup screenshot={SCREENSHOTS.posterDetail} className="scale-90 opacity-80 hidden sm:block" />
+          </div>
+        </section>
+
+        {/* 5b ── MORE SCREENS GALLERY ────────────────────────── */}
+        <section className="relative max-w-6xl mx-auto px-6 pb-24 lg:pb-32">
+          <div className="grid grid-cols-3 gap-6">
+            <ScreenCard screenshot={SCREENSHOTS.synopsis} label="Full details & synopsis" />
+            <ScreenCard screenshot={SCREENSHOTS.favorites} label="Your Favorites library" />
+            <ScreenCard screenshot={SCREENSHOTS.searchResults} label="Search with one-tap favoriting" />
           </div>
         </section>
 
@@ -338,24 +338,7 @@ export default function MovieWallsLanding() {
               </ul>
             </div>
             <div className="flex justify-center">
-              <div className="w-full max-w-md bg-gradient-to-br from-red-600/10 to-transparent p-8 rounded-[40px] border border-red-500/10">
-                <div className="flex gap-3 mb-6">
-                  <div className="flex-1 text-center py-3 rounded-2xl bg-red-600/20 border border-red-500/40 font-semibold text-sm flex items-center justify-center gap-2">
-                    <ImageIcon className="w-4 h-4" /> Posters
-                  </div>
-                  <div className="flex-1 text-center py-3 rounded-2xl bg-white/5 border border-white/10 font-semibold text-sm text-gray-400 flex items-center justify-center gap-2">
-                    <Layers className="w-4 h-4" /> Backdrops
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                  {[0, 1, 2, 3].map((i) => (
-                    <div
-                      key={i}
-                      className="aspect-[2/3] rounded-xl bg-gradient-to-br from-white/15 to-white/5"
-                    />
-                  ))}
-                </div>
-              </div>
+              <PhoneMockup screenshot={SCREENSHOTS.posterDetail} />
             </div>
           </div>
         </section>
@@ -364,22 +347,7 @@ export default function MovieWallsLanding() {
         <section className="relative bg-white/[0.02] border-y border-white/10">
           <div className="max-w-7xl mx-auto px-6 py-24 lg:py-32 grid lg:grid-cols-2 gap-16 items-center">
             <div className="order-2 lg:order-1 flex justify-center">
-              <div className="relative w-full max-w-md bg-gradient-to-br from-white/5 to-transparent p-8 rounded-[40px] border border-white/10">
-                <div className="flex items-center gap-3 px-4 py-3 mb-5 rounded-2xl bg-white/5 border border-white/10">
-                  <Search className="w-4 h-4 text-gray-500" />
-                  <div className="h-2 w-28 bg-white/20 rounded-full" />
-                  <SlidersHorizontal className="w-4 h-4 text-red-400 ml-auto" />
-                </div>
-                {["Popularity ↓", "Any Region", "Genres (comma-separated IDs)"].map((label) => (
-                  <div key={label} className="flex items-center justify-between px-4 py-3.5 mb-3 rounded-2xl bg-white/5 border border-white/10 text-sm text-gray-400">
-                    {label}
-                  </div>
-                ))}
-                <div className="flex gap-3 mt-2">
-                  <div className="flex-1 text-center py-3 rounded-xl border border-red-500/40 text-red-400 text-sm font-semibold">From</div>
-                  <div className="flex-1 text-center py-3 rounded-xl border border-red-500/40 text-red-400 text-sm font-semibold">To</div>
-                </div>
-              </div>
+              <PhoneMockup screenshot={SCREENSHOTS.searchFilters} />
             </div>
             <div className="order-1 lg:order-2">
               <SectionTag>Find it fast</SectionTag>

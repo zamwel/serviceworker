@@ -13,6 +13,7 @@ import {
   Palette,
   History,
   Filter,
+  Smartphone,
   type LucideIcon,
 } from "lucide-react";
 
@@ -34,6 +35,10 @@ export const BRAND = {
     "https://play.google.com/store/apps/details?id=com.codeink.stsl.movie_posters",
   playRedeemUrl: "https://play.google.com/redeem",
   supportEmail: "support@moviewalls.app",
+  /* Official developer/publisher contact registered on the Google Play
+     Console listing - required on the legal pages in addition to the
+     in-app support address. */
+  developerEmail: "deverloper.codeink.playconsole@gmail.com",
   siteUrl: "https://serviceworker-two.vercel.app/privacies/moviewalls",
   origin: "https://serviceworker-two.vercel.app",
   basePath: "/privacies/moviewalls",
@@ -41,6 +46,20 @@ export const BRAND = {
   ratingCount: "3200",
   downloads: "100K+",
   logo: "/moviewalls/logo.png",
+} as const;
+
+/* Real Google Play listing screenshots (downloaded from the store listing),
+   used as actual device mockups across the landing page instead of drawn
+   placeholders. */
+export const SCREENSHOTS = {
+  home: { src: "/moviewalls/screenshots/shot1.png", alt: "MovieWalls home feed with Trending Now, Popular Wallpapers and Top Rated" },
+  backdropDetail: { src: "/moviewalls/screenshots/shot2.png", alt: "Game of Thrones detail screen showing the Backdrops gallery" },
+  synopsis: { src: "/moviewalls/screenshots/shot3.png", alt: "Title synopsis and details bottom sheet with rating, year and genres" },
+  searchFilters: { src: "/moviewalls/screenshots/shot4.png", alt: "Search screen with the Filters sheet for popularity, region, genre and date range" },
+  favorites: { src: "/moviewalls/screenshots/shot5.png", alt: "Favorites screen showing saved titles" },
+  postersGrid: { src: "/moviewalls/screenshots/shot6.png", alt: "Posters gallery grid for Game of Thrones" },
+  posterDetail: { src: "/moviewalls/screenshots/shot7.png", alt: "Game of Thrones detail screen showing the Posters gallery" },
+  searchResults: { src: "/moviewalls/screenshots/shot8.png", alt: "Search results grid with favorite icons on every poster" },
 } as const;
 
 export const NAV_LINKS = [
@@ -66,7 +85,12 @@ export const CORE_FEATURES: Feature[] = [
   {
     icon: Download,
     title: "One-Tap Download",
-    desc: "Save any artwork straight to your device and set it as your wallpaper in seconds.",
+    desc: "Save any poster or backdrop straight to your device in a single tap.",
+  },
+  {
+    icon: Smartphone,
+    title: "Set as Wallpaper Directly",
+    desc: "Apply artwork straight to your home screen, lock screen or both, no gallery app required.",
   },
   {
     icon: Search,
@@ -161,7 +185,7 @@ export const PLANS: Plan[] = [
       "Unlimited browsing",
       "Posters & backdrops for every title",
       "Favorites & search filters",
-      "Supported by occasional ads",
+      "Watermarked downloads, supported by occasional ads",
     ],
   },
   {
