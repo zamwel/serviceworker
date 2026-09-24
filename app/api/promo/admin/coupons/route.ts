@@ -37,6 +37,10 @@ function readDefaults(body: any): CouponDefaults {
 //   Single : { appId, code, ...defaults }
 //   List   : { appId, codes: ["A","B"], ...defaults }
 //   Bulk   : { appId, count: 50, prefix?: "MV", codeLength?: 8, ...defaults }
+//   Rows   : { appId, rows: [{ code, rewardType?, durationDays?, creditAmount?,
+//              maxRedemptions?, note? }], ...defaults }  (CSV import)
+//   Pass `replaceExisting: true` to overwrite any coupon that already has the
+//   same (appId, code) instead of skipping it.
 export async function POST(req: Request) {
   if (!authorized(req)) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
@@ -48,42 +52,87 @@ export async function POST(req: Request) {
       return NextResponse.json({ message: "appId is required" }, { status: 400 });
     }
     const defaults = readDefaults(body);
+    const replaceExisting = body.replaceExisting === true;
 
-    // Resolve the set of codes to create.
-    let codes: string[] = [];
-    if (typeof body.count === "number" && body.count > 0) {
-      const count = Math.min(body.count, 5000); // safety cap
-      const set = new Set<string>();
-      while (set.size < count) {
-        set.add(generateCode(body.prefix ?? "", body.codeLength ?? 8));
+    // Per-row entries (CSV import) carry their own reward config, falling
+    // back to the shared defaults for anything left blank.
+    let rows: (CouponDefaults & { code: string })[] = [];
+    if (Array.isArray(body.rows) && body.rows.length > 0) {
+      rows = body.rows
+        .map((r: any) => ({
+          code: String(r.code ?? "").trim().toUpperCase(),
+          rewardType: r.rewardType ?? defaults.rewardType,
+          durationDays: r.durationDays ?? defaults.durationDays,
+          creditAmount: r.creditAmount ?? defaults.creditAmount,
+          maxRedemptions: r.maxRedemptions ?? defaults.maxRedemptions,
+          active: defaults.active,
+          expiresAt: defaults.expiresAt,
+          note: r.note ?? defaults.note,
+        }))
+        .filter((r: { code: string }) => r.code);
+    } else {
+      // Resolve the set of codes to create from count / codes[] / code.
+      let codes: string[] = [];
+      if (typeof body.count === "number" && body.count > 0) {
+        const count = Math.min(body.count, 5000); // safety cap
+        const set = new Set<string>();
+        while (set.size < count) {
+          set.add(generateCode(body.prefix ?? "", body.codeLength ?? 8));
+        }
+        codes = [...set];
+      } else if (Array.isArray(body.codes)) {
+        codes = body.codes.map((c: any) => String(c).trim().toUpperCase()).filter(Boolean);
+      } else if (body.code) {
+        codes = [String(body.code).trim().toUpperCase()];
       }
-      codes = [...set];
-    } else if (Array.isArray(body.codes)) {
-      codes = body.codes
-        .map((c: any) => String(c).trim().toUpperCase())
-        .filter(Boolean);
-    } else if (body.code) {
-      codes = [String(body.code).trim().toUpperCase()];
+      rows = codes.map((code) => ({ code, ...defaults }));
     }
 
-    if (codes.length === 0) {
+    if (rows.length === 0) {
       return NextResponse.json(
-        { message: "Provide code, codes[], or count." },
+        { message: "Provide code, codes[], rows[], or count." },
         { status: 400 }
       );
     }
 
-    // Skip codes that already exist for this app.
+    const codes = rows.map((r) => r.code);
     const existing = await prisma.promoCoupon.findMany({
       where: { appId, code: { in: codes } },
       select: { code: true },
     });
     const existingSet = new Set(existing.map((e) => e.code));
-    const toCreate = codes.filter((c) => !existingSet.has(c));
 
+    if (replaceExisting) {
+      // Upsert in small concurrent batches — firing one promise per row
+      // (CSV imports can be thousands of rows) exhausts the connection pool.
+      const BATCH_SIZE = 5;
+      for (let i = 0; i < rows.length; i += BATCH_SIZE) {
+        const batch = rows.slice(i, i + BATCH_SIZE);
+        await Promise.all(
+          batch.map(({ code, ...defaults }) =>
+            prisma.promoCoupon.upsert({
+              where: { appId_code: { appId, code } },
+              create: { appId, code, ...defaults },
+              update: { ...defaults },
+            })
+          )
+        );
+      }
+      return NextResponse.json(
+        {
+          success: true,
+          created: rows.filter((r) => !existingSet.has(r.code)).map((r) => r.code),
+          replaced: [...existingSet],
+          createdCount: rows.length,
+        },
+        { status: 201 }
+      );
+    }
+
+    const toCreate = rows.filter((r) => !existingSet.has(r.code));
     if (toCreate.length > 0) {
       await prisma.promoCoupon.createMany({
-        data: toCreate.map((code) => ({ appId, code, ...defaults })),
+        data: toCreate.map(({ code, ...defaults }) => ({ appId, code, ...defaults })),
         skipDuplicates: true,
       });
     }
@@ -91,7 +140,7 @@ export async function POST(req: Request) {
     return NextResponse.json(
       {
         success: true,
-        created: toCreate,
+        created: toCreate.map((r) => r.code),
         createdCount: toCreate.length,
         skipped: [...existingSet],
       },
@@ -133,7 +182,10 @@ export async function GET(req: Request) {
   }
 }
 
-// PATCH /api/promo/admin/coupons  { id, active?, revokeGrants? }
+// PATCH /api/promo/admin/coupons
+//   { id, active?, revokeGrants? }              — status toggle / revoke
+//   { id, code?, rewardType?, durationDays?, creditAmount?, maxRedemptions?,
+//     note?, expiresAt? }                        — full field edit
 //   active:false stops new redemptions; revokeGrants:true also revokes every
 //   device grant already issued from this coupon (kills it on next online sync).
 export async function PATCH(req: Request) {
@@ -145,8 +197,18 @@ export async function PATCH(req: Request) {
     const id = String(body.id ?? "");
     if (!id) return NextResponse.json({ message: "id is required" }, { status: 400 });
 
-    if (typeof body.active === "boolean") {
-      await prisma.promoCoupon.update({ where: { id }, data: { active: body.active } });
+    const data: Record<string, unknown> = {};
+    if (typeof body.active === "boolean") data.active = body.active;
+    if (typeof body.code === "string" && body.code.trim()) data.code = body.code.trim().toUpperCase();
+    if (typeof body.rewardType === "string") data.rewardType = body.rewardType;
+    if ("durationDays" in body) data.durationDays = body.durationDays === null ? null : Number(body.durationDays);
+    if ("creditAmount" in body) data.creditAmount = body.creditAmount === null ? null : Number(body.creditAmount);
+    if (typeof body.maxRedemptions === "number") data.maxRedemptions = body.maxRedemptions;
+    if (typeof body.note === "string") data.note = body.note;
+    if ("expiresAt" in body) data.expiresAt = body.expiresAt ? new Date(body.expiresAt) : null;
+
+    if (Object.keys(data).length > 0) {
+      await prisma.promoCoupon.update({ where: { id }, data });
     }
     if (body.revokeGrants === true) {
       await prisma.promoRedemption.updateMany({

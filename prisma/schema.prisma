@@ -84,6 +84,17 @@ model PromoCoupon {
   @@index([appId])
 }
 
+/// Custom apps registered from the promo admin UI (built-in apps live in
+/// lib/apps.ts and don't need a row here). Kept in the DB — not the browser —
+/// so they survive across devices/browsers and can't be lost to local storage.
+model PromoApp {
+  id        String   @id // slug, e.g. "myapp" — matches PromoCoupon.appId
+  name      String
+  prefix    String
+  fcmTopic  String
+  createdAt DateTime @default(now())
+}
+
 /// A single device's redemption of a coupon. One row per (coupon, device).
 model PromoRedemption {
   id             String      @id @default(cuid())
