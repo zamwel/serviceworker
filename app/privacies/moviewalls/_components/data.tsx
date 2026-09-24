@@ -34,7 +34,7 @@ export const BRAND = {
   playStoreUrl:
     "https://play.google.com/store/apps/details?id=com.codeink.stsl.movie_posters",
   playRedeemUrl: "https://play.google.com/redeem",
-  supportEmail: "support@moviewalls.app",
+  supportEmail: "deverloper.codeink.playconsole@gmail.com",
   /* Official developer/publisher contact registered on the Google Play
      Console listing - required on the legal pages in addition to the
      in-app support address. */

@@ -3,7 +3,7 @@ import React from 'react';
 const TermsOfService = () => {
     const lastUpdated = "February 23, 2026";
     const appName = "Muvees";
-    const contactEmail = "support@moviewalls.app";
+    const contactEmail = "deverloper.codeink.playconsole@gmail.com";
 
     return (
         <div className="min-h-screen bg-[#0A0A0A] text-white font-sans selection:bg-red-600/30">
