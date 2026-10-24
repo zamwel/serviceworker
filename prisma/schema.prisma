@@ -88,11 +88,13 @@ model PromoCoupon {
 /// lib/apps.ts and don't need a row here). Kept in the DB — not the browser —
 /// so they survive across devices/browsers and can't be lost to local storage.
 model PromoApp {
-  id        String   @id // slug, e.g. "myapp" — matches PromoCoupon.appId
-  name      String
-  prefix    String
-  fcmTopic  String
-  createdAt DateTime @default(now())
+  id             String   @id // slug, e.g. "myapp" — matches PromoCoupon.appId
+  name           String
+  prefix         String
+  fcmTopic       String
+  packageName    String?  // e.g. "com.codeink.stsl.muvees"
+  firebaseAppId  String?  // e.g. "1:1083709001383:android:ce7fab718977e78da4d582"
+  createdAt      DateTime @default(now())
 }
 
 /// A single device's redemption of a coupon. One row per (coupon, device).
@@ -112,4 +114,34 @@ model PromoRedemption {
 
   @@unique([couponId, deviceId]) // one redemption per device per coupon
   @@index([appId, deviceId]) // fast device-grant lookup per app
+}
+
+/// Push notification history and delivery/interaction tracking.
+/// Tracks constraints (appId + packageName), status, FCM message ID,
+/// analytics label, and aggregated device delivery & tap metrics.
+model PushNotification {
+  id             String    @id @default(cuid())
+  appId          String    // e.g. "muvees"
+  appName        String?   // display name, e.g. "Muvees"
+  packageName    String?   // e.g. "com.codeink.stsl.muvees" (restricts delivery to this app only)
+  topic          String    @default("all")
+  channelId      String?   // Android notification channel, e.g. "muvees_broadcasts"
+  title          String
+  body           String
+  imageUrl       String?
+  actionUrl      String?   // optional deep link or web link
+  analyticsLabel String?   // FCM v1 fcm_options.analytics_label for zero-app-touch Firebase tracking
+  status         String    @default("sent") // "sent" | "draft" | "failed"
+  fcmMessageId   String?   // Returned FCM v1 resource name
+  error          String?
+  sentAt         DateTime?
+  receivedCount  Int       @default(0) // devices that received the push (from FCM Data API / reports)
+  tappedCount    Int       @default(0) // devices that tapped/opened the push
+  lastSyncedAt   DateTime? // when delivery metrics were last updated
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@index([appId])
+  @@index([status])
+  @@index([createdAt])
 }

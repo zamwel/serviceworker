@@ -48,7 +48,7 @@ export async function GET(req: Request) {
   return NextResponse.json({ apps }, { status: 200 });
 }
 
-// POST /api/promo/admin/apps  { id, name, prefix, fcmTopic }
+// POST /api/promo/admin/apps  { id, name, prefix, fcmTopic, packageName?, firebaseAppId? }
 // Upserts — safe to call again for an app that already exists.
 export async function POST(req: Request) {
   if (!authorized(req)) {
@@ -60,13 +60,16 @@ export async function POST(req: Request) {
     const name = String(body.name ?? "").trim();
     const prefix = String(body.prefix ?? "").trim().toUpperCase();
     const fcmTopic = String(body.fcmTopic ?? "").trim() || `${id}_all`;
+    const packageName = body.packageName ? String(body.packageName).trim() : null;
+    const firebaseAppId = body.firebaseAppId ? String(body.firebaseAppId).trim() : null;
+
     if (!id || !name || !prefix) {
       return NextResponse.json({ message: "id, name, and prefix are required" }, { status: 400 });
     }
     const app = await prisma.promoApp.upsert({
       where: { id },
-      create: { id, name, prefix, fcmTopic },
-      update: { name, prefix, fcmTopic },
+      create: { id, name, prefix, fcmTopic, packageName, firebaseAppId },
+      update: { name, prefix, fcmTopic, packageName, firebaseAppId },
     });
     return NextResponse.json({ success: true, app }, { status: 201 });
   } catch (error: unknown) {

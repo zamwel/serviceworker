@@ -25,9 +25,9 @@ export const BRAND = {
     "Mobile Secret Codes is the ultimate phone diagnostics and hidden code handbook. Access manufacturer secret codes, test hardware sensors, view battery metrics, and discover device tips and tricks for all major phone brands.",
   shortDescription:
     "Explore hidden USSD/MMI codes, run hardware sensor diagnostics, and discover phone tricks for Android and iOS devices.",
-  packageId: "com.codeink.stsl.secretcodes",
+  packageId: "com.stsl.codeink.secretcodes",
   playStoreUrl:
-    "https://play.google.com/store/apps/details?id=com.codeink.stsl.secretcodes",
+    "https://play.google.com/store/apps/details?id=com.stsl.codeink.secretcodes",
   playRedeemUrl: "https://play.google.com/redeem",
   supportEmail: "deverloper.codeink.playconsole@gmail.com",
   developerEmail: "dev1samtechstudiolab@gmail.com",
