@@ -10,6 +10,7 @@ import {
   Headphones,
   HeartPulse,
   ScanText,
+  Terminal,
 } from 'lucide-react';
 import type { ReactNode } from 'react';
 
@@ -24,6 +25,15 @@ type AppEntry = {
 };
 
 const apps: AppEntry[] = [
+  {
+    name: 'Mobile Secret Codes',
+    category: 'Device diagnostics',
+    description: 'Explore hidden USSD codes, test hardware sensors and inspect phone specs.',
+    href: '/privacies/secretcodes',
+    accent: '#06b6d4',
+    logo: <Image src="/secretcodes/logo.png" alt="" width={52} height={52} className="h-full w-full rounded-[14px] object-cover" />,
+    linkLabel: 'Open app page',
+  },
   {
     name: 'Bet of the Day',
     category: 'Sports analytics',
@@ -65,6 +75,15 @@ const apps: AppEntry[] = [
     logo: <Headphones className="h-7 w-7 text-white" aria-hidden="true" />,
   },
   {
+    name: 'MovieWalls',
+    category: 'Personalization',
+    description: 'Cinematic movie & TV posters, backdrops and studio wallpapers.',
+    href: '/privacies/moviewalls',
+    accent: '#ef4444',
+    logo: <Image src="/moviewalls/logo.png" alt="" width={52} height={52} className="h-full w-full rounded-[14px] object-cover" />,
+    linkLabel: 'Open app page',
+  },
+  {
     name: 'BinMatrix',
     category: 'Card intelligence',
     description: 'Look up bank identification numbers and organize your BIN history.',
@@ -75,7 +94,7 @@ const apps: AppEntry[] = [
   },
   {
     name: 'FemCare+',
-    category: 'Women’s wellness',
+    category: "Women's wellness",
     description: 'Cycle tracking, wellness guidance and supportive health tools for women.',
     href: '/privacies/femcareplus',
     accent: '#e91e63',
@@ -147,7 +166,7 @@ export default function Home() {
             >
               <div>
                 <span
-                  className="mb-8 flex h-[52px] w-[52px] items-center justify-center rounded-[16px] shadow-sm"
+                  className="mb-8 flex h-[52px] w-[52px] items-center justify-center rounded-[16px] shadow-sm overflow-hidden"
                   style={{ backgroundColor: app.accent }}
                 >
                   {app.logo}
